@@ -3,10 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
-    <Button android:id="@+id/main_start_btn"
+    <android.support.v4.view.ViewPager android:id="@+id/vp_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="启动"/>
+        android:layout_height="match_parent"></android.support.v4.view.ViewPager>
 
 
 </LinearLayout>

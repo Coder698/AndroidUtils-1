@@ -15,6 +15,7 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
+        maven { url "http://jzaccone.github.io/SlidingMenu-aar" }
         jcenter()
     }
 }
