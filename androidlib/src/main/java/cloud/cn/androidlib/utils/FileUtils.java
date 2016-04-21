@@ -71,4 +71,14 @@ public class FileUtils {
         }
         return flag;
     }
+
+    public static String getAbsolutePath(String dir, String name) {
+        if(!dir.endsWith("/") && !name.startsWith("/")) {
+            return dir + "/" + name;
+        } else if(dir.endsWith("/") && name.startsWith("/")){
+            return dir + name.substring(1);
+        } else {
+            return dir + name;
+        }
+    }
 }

@@ -1,9 +1,15 @@
 package cloud.cn.applicationtest.activity;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -18,15 +24,22 @@ import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
+import java.io.File;
+
 import cloud.cn.androidlib.activity.BaseActivity;
+import cloud.cn.androidlib.download.DownloadManager;
+import cloud.cn.androidlib.download.IDownloader;
+import cloud.cn.androidlib.download.SimpleDownloader;
 import cloud.cn.androidlib.net.SuccessCallback;
 import cloud.cn.androidlib.utils.DeviceInfoUtils;
+import cloud.cn.androidlib.utils.DialogUtils;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.activity.govern.GovernFragment;
 import cloud.cn.applicationtest.activity.home.HomeFragment;
 import cloud.cn.applicationtest.activity.news.NewsFragment;
 import cloud.cn.applicationtest.activity.setting.SettingFragment;
 import cloud.cn.applicationtest.activity.smartservice.SmartServiceFragment;
+import cloud.cn.applicationtest.engine.UpgradeEngine;
 import cloud.cn.applicationtest.entity.UpgradeInfo;
 
 import static cloud.cn.applicationtest.AppConstants.MOBILE_API.UPGRADE_INFO;
@@ -35,7 +48,7 @@ import static cloud.cn.applicationtest.AppConstants.MOBILE_API.UPGRADE_INFO;
  * Created by Cloud on 2016/3/30.
  */
 @ContentView(R.layout.activity_main)
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
     private SparseArray<Fragment> fragments;
     @ViewInject(R.id.fl_main_content)
     private FrameLayout fl_main_content;
@@ -84,21 +97,6 @@ public class MainActivity extends BaseActivity{
 
     @Override
     protected void loadData() {
-        checkUpgrade();
-    }
-
-    private void checkUpgrade() {
-        RequestParams requestParams = new RequestParams(UPGRADE_INFO);
-        x.http().get(requestParams, new SuccessCallback<String>() {
-            @Override
-            public void onSuccess(String result) {
-                UpgradeInfo upgradeInfo = JSON.parseObject(result, UpgradeInfo.class);
-                if(upgradeInfo.getVersion() > DeviceInfoUtils.getVersionCode()) {
-                    LogUtil.d("升级");
-                } else {
-                    LogUtil.d("不升级");
-                }
-            }
-        });
+        UpgradeEngine.checkUpgrade(this);
     }
 }

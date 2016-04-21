@@ -1,63 +1,29 @@
 package cloud.cn.androidlib.download;
 
-import org.xutils.DbManager;
 import org.xutils.common.Callback;
 import org.xutils.common.task.PriorityExecutor;
 import org.xutils.common.util.LogUtil;
-import org.xutils.db.converter.ColumnConverterFactory;
-import org.xutils.ex.DbException;
 import org.xutils.http.RequestParams;
 import org.xutils.x;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executor;
 
 /**
- * Author: wyouflf
- * Date: 13-11-10
- * Time: 下午8:10
+ * Created by Cloud on 2016/4/19.
  */
-public final class DownloadManager {
-
-    static {
-        // 注册DownloadState在数据库中的值类型映射
-        ColumnConverterFactory.registerColumnConverter(DownloadState.class, new DownloadStateConverter());
-    }
-
+public class DownloadManager {
     private static DownloadManager instance;
 
     private final static int MAX_DOWNLOAD_THREAD = 2; // 有效的值范围[1, 3], 设置为3时, 可能阻塞图片加载.
+    private final List<IDownloader> waitingList = new ArrayList<IDownloader>();
+    private final List<IDownloader> downloadingList = new ArrayList<>();
+    private final HashMap<String, Callback.Cancelable>
+            callbackMap = new HashMap<String, Callback.Cancelable>(5);
 
-    private final DbManager db;
-    private final Executor executor = new PriorityExecutor(MAX_DOWNLOAD_THREAD, true);
-    private final List<DownloadInfo> downloadInfoList = new ArrayList<DownloadInfo>();
-    private final ConcurrentHashMap<DownloadInfo, DownloadCallback>
-            callbackMap = new ConcurrentHashMap<DownloadInfo, DownloadCallback>(5);
-
-    private DownloadManager() {
-        DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
-                .setDbName("download")
-                .setDbVersion(1);
-        db = x.getDb(daoConfig);
-        try {
-            List<DownloadInfo> infoList = db.selector(DownloadInfo.class).findAll();
-            if (infoList != null) {
-                for (DownloadInfo info : infoList) {
-                    if (info.getState().value() < DownloadState.FINISHED.value()) {
-                        info.setState(DownloadState.STOPPED);
-                    }
-                    downloadInfoList.add(info);
-                }
-            }
-        } catch (DbException ex) {
-            LogUtil.e(ex.getMessage(), ex);
-        }
-    }
-
-    /*package*/
     public static DownloadManager getInstance() {
         if (instance == null) {
             synchronized (DownloadManager.class) {
@@ -69,111 +35,128 @@ public final class DownloadManager {
         return instance;
     }
 
-    public void updateDownloadInfo(DownloadInfo info) throws DbException {
-        db.update(info);
+    public synchronized void startDownload(IDownloader iDownloader) {
+        if(!containsDownload(iDownloader)) {
+            waitingList.add(iDownloader);
+            iDownloader.onWaiting();
+            startDownloadSchedule();
+        }
     }
 
-    public int getDownloadListCount() {
-        return downloadInfoList.size();
-    }
-
-    public DownloadInfo getDownloadInfo(int index) {
-        return downloadInfoList.get(index);
-    }
-
-    public synchronized void startDownload(String url, String label, String savePath,
-                                           boolean autoResume, boolean autoRename,
-                                           DownloadViewHolder viewHolder) throws DbException {
-
-        String fileSavePath = new File(savePath).getAbsolutePath();
-        DownloadInfo downloadInfo = db.selector(DownloadInfo.class)
-                .where("label", "=", label)
-                .and("fileSavePath", "=", fileSavePath)
-                .findFirst();
-        if (downloadInfo != null) {
-            DownloadCallback callback = callbackMap.get(downloadInfo);
-            if (callback != null) {
-                if (viewHolder == null) {
-                    viewHolder = new DefaultDownloadViewHolder(null, downloadInfo);
+    private synchronized void startDownloadSchedule() {
+        if(downloadingList.size() < MAX_DOWNLOAD_THREAD) {
+            if(waitingList.isEmpty()) return;
+            final IDownloader iDownloader = waitingList.get(0);
+            downloadingList.add(iDownloader);
+            waitingList.remove(0);
+            Callback.ProgressCallback progressCallback = new Callback.ProgressCallback<File>() {
+                @Override
+                public void onSuccess(File result) {
+                    LogUtil.d(iDownloader.getDownloaderId() + " success");
+                    iDownloader.onSuccess(result);
                 }
-                if (callback.switchViewHolder(viewHolder)) {
-                    return;
-                } else {
-                    callback.cancel();
+
+                @Override
+                public void onError(Throwable ex, boolean isOnCallback) {
+                    LogUtil.d(iDownloader.getDownloaderId() + " error");
+                    iDownloader.onError(ex, isOnCallback);
                 }
+
+                @Override
+                public void onCancelled(CancelledException cex) {
+                    LogUtil.d(iDownloader.getDownloaderId() + " cancelled");
+                    iDownloader.onCancelled(cex);
+                }
+
+                @Override
+                public void onFinished() {
+                    LogUtil.d(iDownloader.getDownloaderId() + " finished");
+                    removeDownloadInfo(iDownloader);
+                    startDownloadSchedule();
+                    iDownloader.onFinished();
+                }
+
+                @Override
+                public void onWaiting() {
+                }
+
+                @Override
+                public void onStarted() {
+                    LogUtil.d(iDownloader.getDownloaderId() + " started");
+                    iDownloader.onStarted();
+                }
+
+                @Override
+                public void onLoading(long total, long current, boolean isDownloading) {
+                    iDownloader.onLoading(total, current, isDownloading);
+                }
+            };
+            File saveFile = new File(iDownloader.getSavePath());
+            if(!iDownloader.isReplace() && saveFile.exists()) {
+                progressCallback.onSuccess(saveFile);
+                progressCallback.onFinished();
+            } else {
+                String fileSavePath = saveFile.getAbsolutePath();
+                RequestParams requestParams = new RequestParams(iDownloader.getDownloadUrl());
+                requestParams.setAutoResume(true);
+                requestParams.setAutoRename(iDownloader.isAutoRename());
+                requestParams.setSaveFilePath(fileSavePath);
+                requestParams.setCancelFast(true);
+
+                Callback.Cancelable cancelable = x.http().get(requestParams, progressCallback);
+                callbackMap.put(iDownloader.getDownloaderId(), cancelable);
             }
         }
-
-        // create download info
-        if (downloadInfo == null) {
-            downloadInfo = new DownloadInfo();
-            downloadInfo.setUrl(url);
-            downloadInfo.setAutoRename(autoRename);
-            downloadInfo.setAutoResume(autoResume);
-            downloadInfo.setLabel(label);
-            downloadInfo.setFileSavePath(fileSavePath);
-            db.saveBindingId(downloadInfo);
-        }
-
-        // start downloading
-        if (viewHolder == null) {
-            viewHolder = new DefaultDownloadViewHolder(null, downloadInfo);
-        } else {
-            viewHolder.update(downloadInfo);
-        }
-        DownloadCallback callback = new DownloadCallback(viewHolder);
-        callback.setDownloadManager(this);
-        callback.switchViewHolder(viewHolder);
-        RequestParams params = new RequestParams(url);
-        params.setAutoResume(downloadInfo.isAutoResume());
-        params.setAutoRename(downloadInfo.isAutoRename());
-        params.setSaveFilePath(downloadInfo.getFileSavePath());
-        params.setExecutor(executor);
-        params.setCancelFast(true);
-        Callback.Cancelable cancelable = x.http().get(params, callback);
-        callback.setCancelable(cancelable);
-        callbackMap.put(downloadInfo, callback);
-
-        if (downloadInfoList.contains(downloadInfo)) {
-            int index = downloadInfoList.indexOf(downloadInfo);
-            downloadInfoList.remove(downloadInfo);
-            downloadInfoList.add(index, downloadInfo);
-        } else {
-            downloadInfoList.add(downloadInfo);
-        }
     }
 
-    public void stopDownload(int index) {
-        DownloadInfo downloadInfo = downloadInfoList.get(index);
-        stopDownload(downloadInfo);
-    }
-
-    public void stopDownload(DownloadInfo downloadInfo) {
-        Callback.Cancelable cancelable = callbackMap.get(downloadInfo);
-        if (cancelable != null) {
-            cancelable.cancel();
-        }
-    }
-
-    public void stopAllDownload() {
-        for (DownloadInfo downloadInfo : downloadInfoList) {
-            Callback.Cancelable cancelable = callbackMap.get(downloadInfo);
-            if (cancelable != null) {
+    public synchronized void stopAll() {
+        for(String key : callbackMap.keySet()) {
+            Callback.Cancelable cancelable = callbackMap.get(key);
+            if(cancelable != null) {
                 cancelable.cancel();
             }
         }
+        waitingList.clear();
+        downloadingList.clear();
+        callbackMap.clear();
     }
 
-    public void removeDownload(int index) throws DbException {
-        DownloadInfo downloadInfo = downloadInfoList.get(index);
-        db.delete(downloadInfo);
-        stopDownload(downloadInfo);
-        downloadInfoList.remove(index);
+    public synchronized void stopDownload(IDownloader iDownloader) {
+        Callback.Cancelable cancelable = callbackMap.get(iDownloader.getDownloaderId());
+        if(cancelable != null) {
+            cancelable.cancel();
+        }
+        removeDownloadInfo(iDownloader);
+        startDownloadSchedule();
     }
 
-    public void removeDownload(DownloadInfo downloadInfo) throws DbException {
-        db.delete(downloadInfo);
-        stopDownload(downloadInfo);
-        downloadInfoList.remove(downloadInfo);
+    private synchronized void removeDownloadInfo(IDownloader iDownloader) {
+        for(IDownloader downloader : waitingList) {
+            if(downloader.getDownloaderId().equals(iDownloader.getDownloaderId())) {
+                waitingList.remove(downloader);
+                break;
+            }
+        }
+        for(IDownloader downloader : downloadingList) {
+            if(downloader.getDownloaderId().equals(iDownloader.getDownloaderId())) {
+                downloadingList.remove(downloader);
+                break;
+            }
+        }
+        callbackMap.remove(iDownloader.getDownloaderId());
+    }
+
+    private synchronized boolean containsDownload(IDownloader iDownloader) {
+        for(IDownloader downloader : waitingList) {
+            if(downloader.getDownloaderId().equals(iDownloader.getDownloaderId())) {
+                return true;
+            }
+        }
+        for(IDownloader downloader : downloadingList) {
+            if(downloader.getDownloaderId().equals(iDownloader.getDownloaderId())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
