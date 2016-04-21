@@ -32,6 +32,7 @@ import cloud.cn.androidlib.download.DownloadManager;
 import cloud.cn.androidlib.download.DownloadState;
 import cloud.cn.androidlib.download.IDownloader;
 import cloud.cn.applicationtest.R;
+import cloud.cn.applicationtest.engine.SafeEngine;
 
 /**
  * Created by Cloud on 2016/4/5.
@@ -55,6 +56,16 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void initViews(Bundle savedInstanceState) {
         gv_home.setAdapter(new HomeAdapter());
+        gv_home.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if("手机防盗".equals(names[position])) {
+                    SafeEngine.showSavePassDialog(getActivity());
+                } else if("通讯卫士".equals(names[position])) {
+
+                }
+            }
+        });
     }
 
     @Override

@@ -6,6 +6,7 @@ package cloud.cn.applicationtest;
 public final class AppConstants {
     public final static class PREF {
         public static String GUIDE_DISPLAY = "GUIDE_DISPLAY";
+        public static String SAFE_PASSWORD = "SAFE_PASSWORD";
     }
     public final static class MOBILE_API {
         public final static String ORIGIN = "http://192.168.40.116:8080/guard";
