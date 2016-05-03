@@ -31,6 +31,8 @@ import cloud.cn.androidlib.activity.BaseFragment;
 import cloud.cn.androidlib.download.DownloadManager;
 import cloud.cn.androidlib.download.DownloadState;
 import cloud.cn.androidlib.download.IDownloader;
+import cloud.cn.androidlib.utils.PrefUtils;
+import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.engine.SafeEngine;
 
@@ -60,12 +62,20 @@ public class HomeFragment extends BaseFragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if("手机防盗".equals(names[position])) {
-                    SafeEngine.showSavePassDialog(getActivity());
+                    safeClicked();
                 } else if("通讯卫士".equals(names[position])) {
 
                 }
             }
         });
+    }
+
+    private void safeClicked() {
+        if("".equals(PrefUtils.getString(AppConstants.PREF.SAFE_PASSWORD, ""))) {
+            SafeEngine.showSavePassDialog(getActivity());
+        } else {
+            SafeEngine.showEnterPassDialog(getActivity());
+        }
     }
 
     @Override
