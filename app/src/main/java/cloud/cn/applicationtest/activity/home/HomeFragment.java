@@ -72,8 +72,10 @@ public class HomeFragment extends BaseFragment {
 
     private void safeClicked() {
         if("".equals(PrefUtils.getString(AppConstants.PREF.SAFE_PASSWORD, ""))) {
+            //没有保存密码的场合，保存密码
             SafeEngine.showSavePassDialog(getActivity());
         } else {
+            //已经保存密码的场合，输入密码
             SafeEngine.showEnterPassDialog(getActivity());
         }
     }

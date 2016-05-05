@@ -7,6 +7,9 @@ public final class AppConstants {
     public final static class PREF {
         public static String GUIDE_DISPLAY = "GUIDE_DISPLAY";
         public static String SAFE_PASSWORD = "SAFE_PASSWORD";
+        public static String SIM_SERIA_NUM = "SIM_SERIA_NUM";
+        public static String SAFE_PHONE_NUM = "SAFE_PHONE_NUM";
+        public static String IS_SAFE_OPEN = "IS_SAFE_OPEN";
     }
     public final static class MOBILE_API {
         public final static String ORIGIN = "http://192.168.40.116:8080/guard";

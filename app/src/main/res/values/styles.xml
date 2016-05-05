@@ -40,4 +40,38 @@
         <item name="android:textSize">14sp</item>
         <item name="android:maxLines">1</item>
     </style>
+    <!--手机防盗样式-->
+    <style name="safe_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">#6600ff14</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+    <style name="safe_content">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16dp</item>
+    </style>
+    <style name="safe_navigation_btn">
+        <item name="android:drawablePadding">2dp</item>
+        <item name="android:background">@drawable/shape_safe_next_btn</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+    <style name="safe_next_btn" parent="@style/safe_navigation_btn">
+        <item name="android:drawableRight">@drawable/next</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+    <style name="safe_previous_btn" parent="@style/safe_navigation_btn">
+        <item name="android:drawableRight">@drawable/previous</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_marginLeft">10dp</item>
+    </style>
 </resources>

@@ -72,4 +72,9 @@ public class PrefUtils {
         SharedPreferences sharedPreferences = x.app().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
         sharedPreferences.edit().clear().commit();
     }
+
+    public static void remove(String key) {
+        SharedPreferences sharedPreferences = x.app().getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().remove(key).commit();
+    }
 }
