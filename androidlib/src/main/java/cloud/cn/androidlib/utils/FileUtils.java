@@ -3,6 +3,9 @@ package cloud.cn.androidlib.utils;
 import android.text.TextUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +13,21 @@ import java.util.Set;
  * Created by Cloud on 2016/4/15.
  */
 public class FileUtils {
+    public static void copyFile(byte[] srcData, File destFile) {
+        File parentFile = destFile.getParentFile();
+        if(parentFile != null && !parentFile.exists()) {
+            parentFile.mkdirs();
+        }
+        try {
+            FileOutputStream outputStream = new FileOutputStream(destFile);
+            outputStream.write(srcData);
+            outputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     // 删除文件夹和里面所有内容
     public static void delFolder(String folderPath) {

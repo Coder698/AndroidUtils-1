@@ -41,5 +41,8 @@
         <Button android:id="@+id/safe_setup_previous_btn"
             style="@style/safe_previous_btn"
             android:text="上一步" />
+        <Button android:id="@+id/safe_setup_next_btn"
+            style="@style/safe_next_btn"
+            android:text="下一步" />
     </RelativeLayout>
 </LinearLayout>

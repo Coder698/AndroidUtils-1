@@ -1,5 +1,6 @@
 package cloud.cn.applicationtest.activity.home;
 
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.internal.widget.ViewUtils;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,6 +17,8 @@ import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 import org.xutils.common.Callback;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
@@ -31,10 +35,15 @@ import cloud.cn.androidlib.activity.BaseFragment;
 import cloud.cn.androidlib.download.DownloadManager;
 import cloud.cn.androidlib.download.DownloadState;
 import cloud.cn.androidlib.download.IDownloader;
+import cloud.cn.androidlib.net.SuccessCallback;
+import cloud.cn.androidlib.ui.SimpleCameraPreview;
+import cloud.cn.androidlib.utils.CameraUtils;
+import cloud.cn.androidlib.utils.FileUtils;
 import cloud.cn.androidlib.utils.PrefUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.engine.SafeEngine;
+import cloud.cn.applicationtest.entity.DialogMessageEvent;
 
 /**
  * Created by Cloud on 2016/4/5.
@@ -43,8 +52,12 @@ import cloud.cn.applicationtest.engine.SafeEngine;
 public class HomeFragment extends BaseFragment {
     @ViewInject(R.id.gv_home)
     private GridView gv_home;
+    @ViewInject(R.id.camera_preview)
+    private FrameLayout camera_preview;
     private int[] icons;
     private String[] names;
+    private Camera camera;
+    private int wrongPassNum;
 
     @Override
     protected void initVariables() {
@@ -53,6 +66,7 @@ public class HomeFragment extends BaseFragment {
                 R.drawable.atools, R.drawable.settings};
         names = new String[]{"手机防盗", "通讯卫士", "软件管家", "进程管理", "流量统计", "病毒查杀",
                 "缓存清理", "高级工具", "设置中心"};
+        wrongPassNum = 0;
     }
 
     @Override
@@ -83,6 +97,46 @@ public class HomeFragment extends BaseFragment {
     @Override
     protected void loadData() {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //初始化相机
+        camera = CameraUtils.getCameraInstance(1);
+        SimpleCameraPreview cameraPreview = new SimpleCameraPreview(getActivity(), camera);
+        camera_preview.addView(cameraPreview);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if(camera != null) {
+            camera.release();
+            camera = null;
+        }
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onDialogMessage(DialogMessageEvent messageEvent) {
+        if(messageEvent.getType() == DialogMessageEvent.TYPE_WRONG_PASS) {
+            wrongPassNum++;
+            if(wrongPassNum > 2) {
+                //输错三次拍照留念
+                takePhoto();
+            }
+        }
+    }
+
+    private void takePhoto() {
+        camera.takePicture(null, null, new Camera.PictureCallback() {
+            @Override
+            public void onPictureTaken(byte[] data, Camera camera) {
+                FileUtils.copyFile(data, new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "aaa.jpg"));
+            }
+        });
     }
 
     class HomeAdapter extends BaseAdapter {

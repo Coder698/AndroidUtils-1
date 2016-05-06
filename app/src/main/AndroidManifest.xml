@@ -8,6 +8,18 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!--读取手机状态，如本机号码，sim串号等-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 监听手机启动权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- 发送短信权限 -->
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <!-- 接收短信权限 -->
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <!--照相权限-->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!--获取精准位置-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!--获取粗略位置-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MyApplication"
@@ -31,12 +43,24 @@
             android:name=".activity.MainActivity"
             android:label="首页">
         </activity>
-        <activity android:name=".activity.home.SafeActivity" android:screenOrientation="portrait"></activity>
+        <!--手机防盗界面-->
+        <activity android:name=".activity.home.SafeActivity" android:screenOrientation="portrait" android:launchMode="singleTask"></activity>
         <activity android:name=".activity.home.SafeSetup1Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.SafeSetup2Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.SafeSetup3Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.SafeSetup4Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.ContactListActivity" android:screenOrientation="portrait"></activity>
+        <!--广播接收者-->
+        <receiver android:name=".receiver.BootCompleteReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"></action>
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".receiver.SmsReceiver">
+            <intent-filter android:priority="1000">
+                <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

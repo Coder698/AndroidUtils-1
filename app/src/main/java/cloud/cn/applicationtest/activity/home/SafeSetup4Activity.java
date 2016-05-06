@@ -54,12 +54,20 @@ public class SafeSetup4Activity extends BaseActivity{
 
     }
 
+    @Event(R.id.safe_setup_next_btn)
     private void next(View view) {
+        PrefUtils.putBoolean(AppConstants.PREF.IS_SAFE_GUIDE_FINISHED, true);
+        Intent intent = new Intent(this, SafeActivity.class);
+        startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.safe_next_in, R.anim.safe_next_out);
     }
 
     @Event(R.id.safe_setup_previous_btn)
     private void previous(View view) {
         Intent intent = new Intent(this, SafeSetup3Activity.class);
         startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.safe_prev_in, R.anim.safe_prev_out);
     }
 }

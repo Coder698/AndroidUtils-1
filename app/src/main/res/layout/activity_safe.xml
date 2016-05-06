@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <TextView android:text="1.欢迎使用手机防盗"
+    android:layout_height="match_parent" android:background="@android:color/white">
+    <TextView android:text="手机防盗"
         style="@style/safe_title" />
-    <Button android:id="@+id/btn_save_contact"
-        android:text="联系人"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content">
+        <TextView android:text="安全号码"
+            style="@style/safe_content" />
+        <TextView android:id="@+id/tv_safe_phone_num"
+            android:text="123123"
+            android:gravity="right|center_vertical"
+            style="@style/safe_content" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView android:text="防盗保护是否开启"
+            style="@style/safe_content" />
+        <ImageView android:id="@+id/iv_safe_lock"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <TextView android:id="@+id/tv_safe_enter_guide"
+        android:text="重新进入设置向导"
+        style="@style/safe_content" />
+    <TextView android:background="@android:color/darker_gray"
+        android:text="功能简介"
+        style="@style/safe_content" />
+    <TextView android:text="GPS追踪:#*location*#"
+        android:drawableLeft="@android:drawable/btn_star_big_on"
+        style="@style/safe_content" />
+    <TextView android:text="播放报警音乐:#*alarm*#"
+        android:drawableLeft="@android:drawable/btn_star_big_on"
+        style="@style/safe_content" />
+    <TextView android:text="远程删除数据:#*wipedata*#"
+        android:drawableLeft="@android:drawable/btn_star_big_on"
+        style="@style/safe_content" />
+    <TextView android:text="远程锁屏:#*lockscreen*#"
+        android:drawableLeft="@android:drawable/btn_star_big_on"
+        style="@style/safe_content" />
 </LinearLayout>

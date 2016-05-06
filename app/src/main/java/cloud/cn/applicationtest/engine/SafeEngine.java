@@ -11,13 +11,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
 import org.xutils.common.util.DensityUtil;
 
 import cloud.cn.androidlib.utils.KeysUtils;
 import cloud.cn.androidlib.utils.PrefUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
+import cloud.cn.applicationtest.activity.home.SafeActivity;
 import cloud.cn.applicationtest.activity.home.SafeSetup1Activity;
+import cloud.cn.applicationtest.entity.DialogMessageEvent;
 
 /**
  * Created by Cloud on 2016/4/21.
@@ -89,10 +92,11 @@ public class SafeEngine {
                 String originPass = PrefUtils.getString(AppConstants.PREF.SAFE_PASSWORD, "");
                 if(originPass.equals(enterPass)) {
                     dialog.dismiss();
-                    Intent intent = new Intent(context, SafeSetup1Activity.class);
+                    Intent intent = new Intent(context, SafeActivity.class);
                     context.startActivity(intent);
                 } else {
                     Toast.makeText(context, "密码不正确", Toast.LENGTH_SHORT).show();
+                    EventBus.getDefault().post(new DialogMessageEvent(DialogMessageEvent.TYPE_WRONG_PASS, ""));
                 }
             }
         });

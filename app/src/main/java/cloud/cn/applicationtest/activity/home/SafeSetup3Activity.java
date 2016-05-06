@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
@@ -66,11 +65,15 @@ public class SafeSetup3Activity extends BaseActivity{
         PrefUtils.putString(AppConstants.PREF.SAFE_PHONE_NUM, phoneNum);
         Intent intent = new Intent(this, SafeSetup4Activity.class);
         startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.safe_next_in, R.anim.safe_next_out);
     }
 
     @Event(R.id.safe_setup_previous_btn)
     private void previous(View view) {
         Intent intent = new Intent(this, SafeSetup2Activity.class);
         startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.safe_prev_in, R.anim.safe_prev_out);
     }
 }

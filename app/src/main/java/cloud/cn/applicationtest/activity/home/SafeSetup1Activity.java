@@ -34,6 +34,8 @@ public class SafeSetup1Activity extends BaseActivity{
     private void next(View view) {
         Intent intent = new Intent(this, SafeSetup2Activity.class);
         startActivity(intent);
+        finish();
+        overridePendingTransition(R.anim.safe_next_in, R.anim.safe_next_out);
     }
 
     private void previous(View view) {
