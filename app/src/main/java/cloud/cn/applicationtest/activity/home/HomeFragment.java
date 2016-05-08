@@ -3,39 +3,24 @@ package cloud.cn.applicationtest.activity.home;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
-import android.support.v7.internal.widget.ViewUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.xutils.common.Callback;
 import org.xutils.view.annotation.ContentView;
-import org.xutils.view.annotation.Event;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import cloud.cn.androidlib.activity.BaseFragment;
-import cloud.cn.androidlib.download.DownloadManager;
-import cloud.cn.androidlib.download.DownloadState;
-import cloud.cn.androidlib.download.IDownloader;
-import cloud.cn.androidlib.net.SuccessCallback;
 import cloud.cn.androidlib.ui.SimpleCameraPreview;
 import cloud.cn.androidlib.utils.CameraUtils;
 import cloud.cn.androidlib.utils.FileUtils;
@@ -104,8 +89,10 @@ public class HomeFragment extends BaseFragment {
         super.onStart();
         //初始化相机
         camera = CameraUtils.getCameraInstance(1);
-        SimpleCameraPreview cameraPreview = new SimpleCameraPreview(getActivity(), camera);
-        camera_preview.addView(cameraPreview);
+        if(camera != null) {
+            SimpleCameraPreview cameraPreview = new SimpleCameraPreview(getActivity(), camera);
+            camera_preview.addView(cameraPreview);
+        }
         EventBus.getDefault().register(this);
     }
 
@@ -131,12 +118,14 @@ public class HomeFragment extends BaseFragment {
     }
 
     private void takePhoto() {
-        camera.takePicture(null, null, new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                FileUtils.copyFile(data, new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "aaa.jpg"));
-            }
-        });
+        if(camera != null) {
+            camera.takePicture(null, null, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    FileUtils.copyFile(data, new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "aaa.jpg"));
+                }
+            });
+        }
     }
 
     class HomeAdapter extends BaseAdapter {
