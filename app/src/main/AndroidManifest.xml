@@ -8,6 +8,8 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <!--读取手机状态，如本机号码，sim串号等-->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!--拦截外拨电话权限 -->
+    <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
     <!-- 监听手机启动权限 -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- 发送短信权限 -->
@@ -20,6 +22,8 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--获取粗略位置-->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--手机震动权限-->
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".MyApplication"
@@ -50,9 +54,15 @@
         <activity android:name=".activity.home.SafeSetup3Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.SafeSetup4Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.ContactListActivity" android:screenOrientation="portrait"></activity>
-        <!--服务-->
+        <!--高级工具界面-->
+        <activity android:name=".activity.home.AToolsActivity" android:screenOrientation="portrait"></activity>
+        <!--设置中心-->
+        <activity android:name=".activity.home.SettingActivity" android:screenOrientation="portrait"></activity>
+        <!--位置服务-->
         <service android:name=".service.LocationService"></service>
-        <!--广播接收者-->
+        <!--归属地显示服务-->
+        <service android:name=".service.ShowAddressService"></service>
+        <!--管理员接收者-->
         <receiver android:name=".receiver.MyAdmin"
             android:label="@string/sample_device_admin"
             android:description="@string/sample_device_admin_description"
@@ -63,11 +73,13 @@
                 <action android:name="android.app.action.DEVICE_ADMIN_ENABLED" />
             </intent-filter>
         </receiver>
+        <!--系统启动接收者-->
         <receiver android:name=".receiver.BootCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"></action>
             </intent-filter>
         </receiver>
+        <!--短信接收者-->
         <receiver android:name=".receiver.SmsReceiver">
             <intent-filter android:priority="1000">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"></action>

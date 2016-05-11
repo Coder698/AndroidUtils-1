@@ -1,7 +1,6 @@
 package cloud.cn.androidlib.engine;
 
 import android.content.AsyncQueryHandler;
-import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cloud.cn.androidlib.entity.ContactBean;
-import cloud.cn.androidlib.net.SuccessCallback;
+import cloud.cn.androidlib.interfaces.SuccessCallback;
 
 /**
  * Created by Cloud on 2016/4/25.

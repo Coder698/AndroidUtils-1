@@ -2,10 +2,14 @@ package cloud.cn.androidlib.utils;
 
 import android.text.TextUtils;
 
+import org.xutils.x;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,19 +17,83 @@ import java.util.Set;
  * Created by Cloud on 2016/4/15.
  */
 public class FileUtils {
-    public static void copyFile(byte[] srcData, File destFile) {
-        File parentFile = destFile.getParentFile();
-        if(parentFile != null && !parentFile.exists()) {
-            parentFile.mkdirs();
-        }
+    /**
+     * 拷贝assets中资源到指定文件
+     * @param assetFileName
+     * @param destFile
+     */
+    public static boolean copyAssets(String assetFileName, File destFile) {
+        boolean isSuccess = false;
+        createParentDirs(destFile);
+        InputStream assetIS = null;
+        BufferedOutputStream bos = null;
+        byte[] buffer = new byte[1024];
+        int len = 0;
         try {
-            FileOutputStream outputStream = new FileOutputStream(destFile);
+            assetIS = x.app().getAssets().open(assetFileName);
+            bos = new BufferedOutputStream(new FileOutputStream(destFile));
+            while((len = assetIS.read(buffer)) != -1) {
+                bos.write(buffer, 0, len);
+            }
+            isSuccess = true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if(assetIS != null) {
+                try {
+                    assetIS.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if(bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 拷贝字节流到文件
+     * @param srcData
+     * @param destFile
+     */
+    public static boolean copyFile(byte[] srcData, File destFile) {
+        boolean isSuccess = false;
+        createParentDirs(destFile);
+        FileOutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(destFile);
             outputStream.write(srcData);
-            outputStream.close();
+            isSuccess = true;
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            if(outputStream != null) {
+                try {
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 创建父文件夹
+     * @param file
+     */
+    public static void createParentDirs(File file) {
+        File parentFile = file.getParentFile();
+        if(parentFile != null && !parentFile.exists()) {
+            parentFile.mkdirs();
         }
     }
 

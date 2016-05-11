@@ -13,7 +13,10 @@ import android.widget.ImageView;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
+import java.io.File;
+
 import cloud.cn.androidlib.activity.BaseActivity;
+import cloud.cn.androidlib.utils.FileUtils;
 import cloud.cn.androidlib.utils.PrefUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
@@ -88,6 +91,18 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
+        copyDb();
+    }
 
+    private void copyDb() {
+        final File dbFile = new File(getFilesDir(), "address.db");
+        if(!dbFile.exists()) {
+            new Thread() {
+                @Override
+                public void run() {
+                    FileUtils.copyAssets("address.db", dbFile);
+                }
+            }.start();
+        }
     }
 }

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.view.WindowManager;
 
 import org.xutils.common.util.LogUtil;
 import org.xutils.x;
@@ -15,13 +16,11 @@ public class DeviceInfoUtils {
   /*
    * 获取屏幕高度
    */
-  public static int getScreenHeight(Activity context) {
+  public static int getScreenHeight() {
+    WindowManager wm = (WindowManager) x.app()
+            .getSystemService(Context.WINDOW_SERVICE);
     DisplayMetrics dm = new DisplayMetrics();
-    if (Build.VERSION.SDK_INT < 17) {
-      (context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-    } else {
-      (context).getWindowManager().getDefaultDisplay().getRealMetrics(dm);
-    }
+    wm.getDefaultDisplay().getMetrics(dm);
     int height = dm.heightPixels;
     return height;
   }
@@ -29,15 +28,11 @@ public class DeviceInfoUtils {
   /*
    * 获取屏幕宽度
    */
-  public static int getScreenWidth(Activity context) {
+  public static int getScreenWidth() {
+    WindowManager wm = (WindowManager) x.app()
+            .getSystemService(Context.WINDOW_SERVICE);
     DisplayMetrics dm = new DisplayMetrics();
-    if (Build.VERSION.SDK_INT < 17) {
-      //NEXUS 5 DisplayMetrics{density=3.0, width=1080, height=1776, scaledDensity=3.0, xdpi=442.451, ydpi=443.345}
-      (context).getWindowManager().getDefaultDisplay().getMetrics(dm);
-    } else {
-      //NEXUS 5 DisplayMetrics{density=3.0, width=1080, height=1920, scaledDensity=3.0, xdpi=442.451, ydpi=443.345}
-      (context).getWindowManager().getDefaultDisplay().getRealMetrics(dm);
-    }
+    wm.getDefaultDisplay().getMetrics(dm);
     int width = dm.widthPixels;
     return width;
   }

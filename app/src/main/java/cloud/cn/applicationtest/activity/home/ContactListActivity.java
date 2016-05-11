@@ -15,7 +15,7 @@ import java.util.List;
 import cloud.cn.androidlib.activity.BaseActivity;
 import cloud.cn.androidlib.engine.ContactEngine;
 import cloud.cn.androidlib.entity.ContactBean;
-import cloud.cn.androidlib.net.SuccessCallback;
+import cloud.cn.androidlib.interfaces.SuccessCallback;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.adapter.ContactListAdapter;

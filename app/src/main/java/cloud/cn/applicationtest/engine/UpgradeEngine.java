@@ -19,7 +19,7 @@ import java.io.File;
 import cloud.cn.androidlib.download.DownloadManager;
 import cloud.cn.androidlib.download.IDownloader;
 import cloud.cn.androidlib.download.SimpleDownloader;
-import cloud.cn.androidlib.net.SuccessCallback;
+import cloud.cn.androidlib.interfaces.SuccessCallback;
 import cloud.cn.androidlib.utils.DeviceInfoUtils;
 import cloud.cn.androidlib.utils.DialogUtils;
 import static cloud.cn.applicationtest.AppConstants.DATA_SAVE_PATH.*;

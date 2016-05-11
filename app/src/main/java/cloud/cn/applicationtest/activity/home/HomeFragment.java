@@ -1,5 +1,6 @@
 package cloud.cn.applicationtest.activity.home;
 
+import android.content.Intent;
 import android.hardware.Camera;
 import android.os.Bundle;
 import android.os.Environment;
@@ -43,6 +44,7 @@ public class HomeFragment extends BaseFragment {
     private String[] names;
     private Camera camera;
     private int wrongPassNum;
+    private SimpleCameraPreview cameraPreview;
 
     @Override
     protected void initVariables() {
@@ -64,9 +66,23 @@ public class HomeFragment extends BaseFragment {
                     safeClicked();
                 } else if("通讯卫士".equals(names[position])) {
 
+                } else if("高级工具".equals(names[position])) {
+                    gotoATools();
+                } else if("设置中心".equals(names[position])) {
+                    gotoSettings();
                 }
             }
         });
+    }
+
+    private void gotoATools() {
+        Intent intent = new Intent(getActivity(), AToolsActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoSettings() {
+        Intent intent = new Intent(getActivity(), SettingActivity.class);
+        startActivity(intent);
     }
 
     private void safeClicked() {
@@ -90,7 +106,7 @@ public class HomeFragment extends BaseFragment {
         //初始化相机
         camera = CameraUtils.getCameraInstance(1);
         if(camera != null) {
-            SimpleCameraPreview cameraPreview = new SimpleCameraPreview(getActivity(), camera);
+            cameraPreview = new SimpleCameraPreview(getActivity(), camera);
             camera_preview.addView(cameraPreview);
         }
         EventBus.getDefault().register(this);
@@ -100,6 +116,7 @@ public class HomeFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         if(camera != null) {
+            camera_preview.removeView(cameraPreview);
             camera.release();
             camera = null;
         }

@@ -1,38 +1,22 @@
 package cloud.cn.applicationtest.activity;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.Handler;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import com.alibaba.fastjson.JSON;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
-import org.xutils.common.util.LogUtil;
-import org.xutils.http.RequestParams;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
-
-import java.io.File;
 
 import cloud.cn.androidlib.activity.BaseActivity;
-import cloud.cn.androidlib.download.DownloadManager;
-import cloud.cn.androidlib.download.IDownloader;
-import cloud.cn.androidlib.download.SimpleDownloader;
-import cloud.cn.androidlib.net.SuccessCallback;
-import cloud.cn.androidlib.utils.DeviceInfoUtils;
-import cloud.cn.androidlib.utils.DialogUtils;
+import cloud.cn.androidlib.utils.PrefUtils;
+import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.activity.govern.GovernFragment;
 import cloud.cn.applicationtest.activity.home.HomeFragment;
@@ -40,9 +24,6 @@ import cloud.cn.applicationtest.activity.news.NewsFragment;
 import cloud.cn.applicationtest.activity.setting.SettingFragment;
 import cloud.cn.applicationtest.activity.smartservice.SmartServiceFragment;
 import cloud.cn.applicationtest.engine.UpgradeEngine;
-import cloud.cn.applicationtest.entity.UpgradeInfo;
-
-import static cloud.cn.applicationtest.AppConstants.MOBILE_API.UPGRADE_INFO;
 
 /**
  * Created by Cloud on 2016/3/30.
@@ -97,6 +78,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void loadData() {
-        UpgradeEngine.checkUpgrade(this);
+        if(PrefUtils.getBoolean(AppConstants.PREF.IS_AUTO_UPDATE, true)) {
+            UpgradeEngine.checkUpgrade(this);
+        }
     }
 }

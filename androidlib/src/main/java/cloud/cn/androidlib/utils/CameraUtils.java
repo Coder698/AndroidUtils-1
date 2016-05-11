@@ -2,8 +2,6 @@ package cloud.cn.androidlib.utils;
 
 import android.hardware.Camera;
 
-import cloud.cn.androidlib.net.SuccessCallback;
-
 /**
  * Created by john on 2016/5/6.
  */

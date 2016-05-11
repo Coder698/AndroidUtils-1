@@ -41,7 +41,7 @@
         <item name="android:maxLines">1</item>
     </style>
     <!--手机防盗样式-->
-    <style name="safe_title">
+    <style name="home_common_title">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">50dp</item>
         <item name="android:gravity">center</item>

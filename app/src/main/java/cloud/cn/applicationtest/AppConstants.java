@@ -11,6 +11,7 @@ public final class AppConstants {
         public static String SAFE_PHONE_NUM = "SAFE_PHONE_NUM";
         public static String IS_SAFE_OPEN = "IS_SAFE_OPEN";
         public static String IS_SAFE_GUIDE_FINISHED = "IS_SAFE_GUIDE_FINISHED";
+        public static String IS_AUTO_UPDATE = "IS_AUTO_UPDATE";
     }
     public final static class MOBILE_API {
         public final static String ORIGIN = "http://192.168.40.116:8080/guard";

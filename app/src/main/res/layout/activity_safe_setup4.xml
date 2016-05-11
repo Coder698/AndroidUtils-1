@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@android:color/white">
     <TextView android:text="4.恭喜您，设置完成"
-        style="@style/safe_title" />
+        style="@style/home_common_title" />
     <TextView android:text="强烈建议您开启防盗保护："
         android:drawableLeft="@android:drawable/btn_star_big_on"
         style="@style/safe_content" />

@@ -3,7 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" android:background="@android:color/white">
     <TextView android:text="2.手机卡的绑定"
-        style="@style/safe_title" />
+        style="@style/home_common_title" />
     <TextView android:text="通过绑定sim卡"
         style="@style/safe_content" />
     <TextView android:text="如果下次重启手机发现sim变化，就会发送报警短信"
