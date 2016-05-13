@@ -65,7 +65,7 @@ public class HomeFragment extends BaseFragment {
                 if("手机防盗".equals(names[position])) {
                     safeClicked();
                 } else if("通讯卫士".equals(names[position])) {
-
+                    gotoCommuGuard();
                 } else if("高级工具".equals(names[position])) {
                     gotoATools();
                 } else if("设置中心".equals(names[position])) {
@@ -73,6 +73,11 @@ public class HomeFragment extends BaseFragment {
                 }
             }
         });
+    }
+
+    private void gotoCommuGuard() {
+        Intent intent = new Intent(getActivity(), CommuGuardActivity.class);
+        startActivity(intent);
     }
 
     private void gotoATools() {

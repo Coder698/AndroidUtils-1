@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
@@ -14,14 +15,13 @@ import org.xutils.x;
 
 public class DeviceInfoUtils {
   /*
-   * 获取屏幕高度
+   * 获取屏幕高度,不包括虚拟键盘，包括状态栏
    */
   public static int getScreenHeight() {
     WindowManager wm = (WindowManager) x.app()
             .getSystemService(Context.WINDOW_SERVICE);
     DisplayMetrics dm = new DisplayMetrics();
-    wm.getDefaultDisplay().getMetrics(dm);
-    int height = dm.heightPixels;
+    int height = wm.getDefaultDisplay().getHeight();
     return height;
   }
 
@@ -35,6 +35,17 @@ public class DeviceInfoUtils {
     wm.getDefaultDisplay().getMetrics(dm);
     int width = dm.widthPixels;
     return width;
+  }
+
+  /**
+   * 获取activity显示区域,包括虚拟键盘，不包括状态栏,需要activity渲染完成才能取到正确的值
+   * @param context
+   * @return
+     */
+  public static Rect getDisplayRect(Activity context) {
+    Rect frame = new Rect();
+    context.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+    return frame;
   }
 
   /**

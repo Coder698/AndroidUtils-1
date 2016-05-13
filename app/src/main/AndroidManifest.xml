@@ -24,6 +24,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!--手机震动权限-->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!--弹出窗体权限 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".MyApplication"
@@ -54,10 +56,13 @@
         <activity android:name=".activity.home.SafeSetup3Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.SafeSetup4Activity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.ContactListActivity" android:screenOrientation="portrait"></activity>
+        <!--通讯卫士界面-->
+        <activity android:name=".activity.home.CommuGuardActivity" android:screenOrientation="portrait"></activity>
         <!--高级工具界面-->
         <activity android:name=".activity.home.AToolsActivity" android:screenOrientation="portrait"></activity>
         <!--设置中心-->
         <activity android:name=".activity.home.SettingActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.home.DragViewActivity" android:screenOrientation="portrait"></activity>
         <!--位置服务-->
         <service android:name=".service.LocationService"></service>
         <!--归属地显示服务-->

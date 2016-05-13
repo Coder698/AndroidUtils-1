@@ -1,7 +1,6 @@
 package cloud.cn.applicationtest.ui;
 
 import android.content.Context;
-import android.support.v7.internal.widget.ViewUtils;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
@@ -17,7 +16,7 @@ import cloud.cn.applicationtest.R;
 /**
  * Created by john on 2016/5/11.
  */
-public class SettingItemView extends RelativeLayout{
+public class SettingToggleView extends RelativeLayout{
     @ViewInject(R.id.tv_setting_title)
     private TextView tv_setting_title;
     @ViewInject(R.id.tv_setting_desc)
@@ -29,13 +28,13 @@ public class SettingItemView extends RelativeLayout{
     private String desc_off;
     private final String NAMESPACE = "http://schemas.android.com/apk/res-auto";
 
-    public SettingItemView(Context context) {
+    public SettingToggleView(Context context) {
         super(context);
         initView();
     }
 
     //xml定义的view会调用这个，传入attrs
-    public SettingItemView(Context context, AttributeSet attrs) {
+    public SettingToggleView(Context context, AttributeSet attrs) {
         super(context, attrs);
         initView(attrs);
     }
@@ -71,7 +70,7 @@ public class SettingItemView extends RelativeLayout{
 
     private void initView(AttributeSet attrs) {
         //填充布局添加到该控件根节点
-        View child = View.inflate(getContext(), R.layout.item_home_settings, this);
+        View child = View.inflate(getContext(), R.layout.item_setting_toggleview, this);
         x.view().inject(this, child);
         if(attrs != null) {
             title = attrs.getAttributeValue(NAMESPACE, "title");

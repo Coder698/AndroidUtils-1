@@ -6,14 +6,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.PixelFormat;
+import android.net.Uri;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import cloud.cn.androidlib.utils.PrefUtils;
+import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.engine.AToolsEngine;
 
@@ -26,6 +33,11 @@ public class ShowAddressService extends Service{
     private OutCallReceiver outCallReceiver;
     private WindowManager wm;
     private View tv;
+    //{"半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿"}
+    private static final int[] bgs = new int[]{R.drawable.call_locate_white, R.drawable.call_locate_orange,
+            R.drawable.call_locate_blue, R.drawable.call_locate_gray, R.drawable.call_locate_green};
+    int startX;
+    int startY;
 
     @Nullable
     @Override
@@ -56,17 +68,51 @@ public class ShowAddressService extends Service{
     }
 
     public void showMyToast(String msg) {
+        int which = PrefUtils.getInt(AppConstants.PREF.STYLE_WHICH, 0);
         tv = View.inflate(getApplicationContext(), R.layout.window_my_toast, null);
+        tv.setBackgroundResource(bgs[which]);
         TextView tv_address = (TextView)tv.findViewById(R.id.tv_address);
         tv_address.setText(msg);
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.height = WindowManager.LayoutParams.WRAP_CONTENT;
         params.width = WindowManager.LayoutParams.WRAP_CONTENT;
+        params.gravity = Gravity.TOP | Gravity.LEFT;//需要指定左上角，x,y坐标才是相对于左上角的
+        params.x = PrefUtils.getInt(AppConstants.PREF.LAST_X, 0);
+        params.y = PrefUtils.getInt(AppConstants.PREF.LAST_Y, 0);
         params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE //不可获取焦点
-                | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE  //不可触摸
+                //| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE  //不可触摸
                 | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON; //保持屏幕点亮
         params.format = PixelFormat.TRANSLUCENT; //支持半透明
-        params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        //params.type = WindowManager.LayoutParams.TYPE_TOAST; //类型为吐司,不响应点击事件
+        //可以滑动的窗体类型,需要权限SYSTEM_ALERT_WINDOW,如果是6.0以上版本，在app store安装的版本可以用，否则还要去设置-应用中手动开启
+        if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(getApplication())) {
+            params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        } else {
+            params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
+            tv.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch(event.getAction()) {
+                        case MotionEvent.ACTION_DOWN:
+                            startX = (int)event.getRawX();
+                            startY = (int)event.getRawY();
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            int dx = (int)event.getRawX() - startX;
+                            int dy = (int)event.getRawY() - startY;
+                            startX = (int)event.getRawX();
+                            startY = (int)event.getRawY();
+                            params.x += dx;
+                            params.y += dy;
+                            wm.updateViewLayout(tv, params);//更新布局
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            break;
+                    }
+                    return true;
+                }
+            });
+        }
         wm.addView(tv, params);
     }
 
