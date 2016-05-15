@@ -1,5 +1,8 @@
 package cloud.cn.androidlib.utils;
 
+import android.os.Build;
+import android.os.Environment;
+import android.os.StatFs;
 import android.text.TextUtils;
 
 import org.xutils.x;
@@ -166,5 +169,58 @@ public class FileUtils {
         } else {
             return dir + name;
         }
+    }
+
+    //外部存储是否可用
+    public static boolean isExternalStorageAvailable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+    }
+
+    //得到外部存储可用空间大小
+    public static long getExternalAvailableBytes() {
+        if(isExternalStorageAvailable()) {
+            File dir = Environment.getExternalStorageDirectory();
+            FileSysData fileSysData = getFileSysData(dir.getPath());
+            return fileSysData.availableBytes;
+        } else {
+            return -1;
+        }
+    }
+
+    //得到外部存储总空间大小
+    public static long getExternalTotalBytes() {
+        if(isExternalStorageAvailable()) {
+            File dir = Environment.getExternalStorageDirectory();
+            FileSysData fileSysData = getFileSysData(dir.getPath());
+            return fileSysData.totalBytes;
+        } else {
+            return -1;
+        }
+    }
+
+    static FileSysData getFileSysData(String path) {
+        long blockSize;
+        long totalBlocks;
+        long availableBlocks;
+        StatFs stat = new StatFs(path);
+        //API18以后getBlockSize和getBlockCount改成getBlockSizeLong和getBlockCountLong
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            blockSize = stat.getBlockSizeLong();
+            totalBlocks = stat.getBlockCountLong();
+            availableBlocks = stat.getAvailableBlocksLong();
+        } else {
+            blockSize = stat.getBlockSize();
+            totalBlocks = stat.getBlockCount();
+            availableBlocks = stat.getAvailableBlocks();
+        }
+        FileSysData fileSysData = new FileSysData();
+        fileSysData.totalBytes = totalBlocks * blockSize;
+        fileSysData.availableBytes = availableBlocks * blockSize;
+        return fileSysData;
+    }
+
+    static class FileSysData {
+        long totalBytes;
+        long availableBytes;
     }
 }

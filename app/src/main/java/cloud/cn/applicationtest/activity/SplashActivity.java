@@ -2,15 +2,10 @@ package cloud.cn.applicationtest.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
 import android.widget.ImageView;
 
-import org.xutils.ex.DbException;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
@@ -21,8 +16,6 @@ import cloud.cn.androidlib.utils.FileUtils;
 import cloud.cn.androidlib.utils.PrefUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
-import cloud.cn.applicationtest.db.DbUtils;
-import cloud.cn.applicationtest.engine.Blacklist;
 
 /**
  * Created by Cloud on 2016/3/26.

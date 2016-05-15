@@ -1,4 +1,4 @@
-package cloud.cn.applicationtest.engine;
+package cloud.cn.applicationtest.entity;
 
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
