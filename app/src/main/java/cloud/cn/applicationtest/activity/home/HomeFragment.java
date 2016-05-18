@@ -70,9 +70,16 @@ public class HomeFragment extends BaseFragment {
                     gotoATools();
                 } else if("设置中心".equals(names[position])) {
                     gotoSettings();
+                } else if("软件管家".equals(names[position])) {
+                    gotoAppManager();
                 }
             }
         });
+    }
+
+    private void gotoAppManager() {
+        Intent intent = new Intent(getActivity(), AppManagerActivity.class);
+        startActivity(intent);
     }
 
     private void gotoCommuGuard() {

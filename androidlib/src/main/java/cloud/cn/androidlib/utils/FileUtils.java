@@ -1,5 +1,7 @@
 package cloud.cn.androidlib.utils;
 
+import android.app.ActivityManager;
+import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -176,7 +178,10 @@ public class FileUtils {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }
 
-    //得到外部存储可用空间大小
+    /**
+     * 得到外部存储可用空间大小,字节,可以通过Formatter.formatFileSize获取可取格式
+     * @return
+     */
     public static long getExternalAvailableBytes() {
         if(isExternalStorageAvailable()) {
             File dir = Environment.getExternalStorageDirectory();
@@ -187,7 +192,10 @@ public class FileUtils {
         }
     }
 
-    //得到外部存储总空间大小
+    /**
+     * 得到外部存储总空间大小，字节,可以通过Formatter.formatFileSize获取可取格式
+     * @return
+     */
     public static long getExternalTotalBytes() {
         if(isExternalStorageAvailable()) {
             File dir = Environment.getExternalStorageDirectory();
@@ -196,6 +204,17 @@ public class FileUtils {
         } else {
             return -1;
         }
+    }
+
+    /**
+     * 得到可用内容大小
+     * @return
+     */
+    public static long getAvailMemBytes() {
+        ActivityManager am = (ActivityManager)x.app().getSystemService(Context.ACTIVITY_SERVICE);
+        ActivityManager.MemoryInfo mi = new ActivityManager.MemoryInfo();
+        am.getMemoryInfo(mi);
+        return mi.availMem;
     }
 
     static FileSysData getFileSysData(String path) {

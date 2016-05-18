@@ -63,6 +63,7 @@
         <!--设置中心-->
         <activity android:name=".activity.home.SettingActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.DragViewActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activity.home.AppManagerActivity" android:screenOrientation="portrait"></activity>
         <!--位置服务-->
         <service android:name=".service.LocationService"></service>
         <!--归属地显示服务-->
