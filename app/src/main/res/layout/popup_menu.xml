@@ -3,7 +3,8 @@
     android:orientation="horizontal" android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@android:color/holo_blue_light">
-    <LinearLayout android:gravity="center_horizontal"
+    <LinearLayout android:id="@+id/ll_uninstall"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -16,7 +17,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <LinearLayout android:gravity="center_horizontal"
+    <LinearLayout android:id="@+id/ll_launch"
+        android:gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:orientation="vertical"
         android:layout_width="wrap_content"
@@ -30,7 +32,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
-    <LinearLayout android:gravity="center_horizontal"
+    <LinearLayout android:id="@+id/ll_share"
+        android:gravity="center_horizontal"
         android:layout_marginLeft="10dp"
         android:orientation="vertical"
         android:layout_width="wrap_content"

@@ -15,7 +15,7 @@ import org.xutils.view.annotation.ViewInject;
 import cloud.cn.androidlib.activity.BaseActivity;
 import cloud.cn.androidlib.utils.DialogUtils;
 import cloud.cn.androidlib.utils.PrefUtils;
-import cloud.cn.androidlib.utils.ServiceUtils;
+import cloud.cn.androidlib.utils.SystemInfoUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.service.ShowAddressService;
@@ -55,7 +55,7 @@ public class SettingActivity extends BaseActivity{
             }
         });
         //归属地设置
-        siv_show_address.setChecked(ServiceUtils.isServiceRunning(ShowAddressService.class.getName()));
+        siv_show_address.setChecked(SystemInfoUtils.isServiceRunning(ShowAddressService.class.getName()));
         siv_show_address.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

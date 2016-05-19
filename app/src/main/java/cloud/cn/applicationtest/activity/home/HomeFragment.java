@@ -72,6 +72,8 @@ public class HomeFragment extends BaseFragment {
                     gotoSettings();
                 } else if("软件管家".equals(names[position])) {
                     gotoAppManager();
+                } else if("进程管理".equals(names[position])) {
+                    gotoTaskManager();
                 }
             }
         });
@@ -89,6 +91,11 @@ public class HomeFragment extends BaseFragment {
 
     private void gotoATools() {
         Intent intent = new Intent(getActivity(), AToolsActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoTaskManager() {
+        Intent intent = new Intent(getActivity(), TaskManagerActivity.class);
         startActivity(intent);
     }
 
