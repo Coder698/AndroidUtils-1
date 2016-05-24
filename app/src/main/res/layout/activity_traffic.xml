@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView android:text="流量管理"
+        style="@style/home_common_title" />
+    <SlidingDrawer android:id="@+id/sd_demo"
+        android:handle="@+id/my_handle"
+        android:content="@+id/my_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView android:id="@id/my_handle"
+            android:src="@drawable/lock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <LinearLayout android:id="@id/my_content"
+            android:background="@android:color/darker_gray"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView android:text="我是内容"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+    </SlidingDrawer>
+</LinearLayout>

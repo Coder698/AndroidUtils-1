@@ -1,5 +1,7 @@
 package cloud.cn.applicationtest.db;
 
+import android.database.sqlite.SQLiteDatabase;
+
 import org.xutils.DbManager;
 import org.xutils.x;
 
@@ -26,5 +28,10 @@ public class DbUtils {
             });
     public static DbManager getInstance() {
         return x.getDb(daoConfig);
+    }
+
+    public static SQLiteDatabase getAntiVirusDb() {
+        String dbPath = x.app().getFilesDir().getAbsolutePath() + "/" + "antivirus.db";
+        return SQLiteDatabase.openDatabase(dbPath, null, SQLiteDatabase.OPEN_READONLY);
     }
 }

@@ -9,6 +9,7 @@ public class AppInfo {
     private Drawable icon;
     private String name;
     private String packname;
+    private String md5Sign; //md5加密过的签名
     private boolean inRom; //true代码装在内部存储中,false表示装在外部存储中
     private boolean userApp;
 
@@ -50,5 +51,13 @@ public class AppInfo {
 
     public void setUserApp(boolean userApp) {
         this.userApp = userApp;
+    }
+
+    public String getMd5Sign() {
+        return md5Sign;
+    }
+
+    public void setMd5Sign(String md5Sign) {
+        this.md5Sign = md5Sign;
     }
 }

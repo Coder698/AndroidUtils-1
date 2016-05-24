@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@android:color/white">
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content">
+        <ImageView android:id="@+id/iv_icon"
+            android:src="@drawable/lock"
+            android:layout_width="50dp"
+            android:layout_height="50dp" />
+        <TextView android:text="系统"
+            android:textSize="20dp"
+            android:textColor="@android:color/black"
+            android:layout_toRightOf="@id/iv_icon"
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView android:text="手机内存"
+            android:layout_below="@id/tv_name"
+            android:layout_toRightOf="@id/iv_icon"
+            android:textSize="18dp"
+            android:textColor="@android:color/darker_gray"
+            android:id="@+id/tv_mem_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+    <CheckBox android:id="@+id/cb_checked"
+        android:focusable="false"
+        android:clickable="false"
+        android:focusableInTouchMode="false"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>

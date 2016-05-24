@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cloud.cn.androidlib.entity.AppInfo;
+import cloud.cn.androidlib.entity.TaskInfo;
 
 /**
  * Created by Cloud on 2016/5/16.
@@ -29,12 +31,14 @@ public class SystemInfoUtils {
      * 得到当前系统所有app信息
      * @return
      */
-    public static List<AppInfo> getAppInfos() {
+    public static List<AppInfo> getAppInfos(int flags) {
         PackageManager pm = x.app().getPackageManager();
-        List<PackageInfo> infos = pm.getInstalledPackages(0);//packageInfo表示清单文件
+        List<PackageInfo> infos = pm.getInstalledPackages(flags);//packageInfo表示清单文件
         List<AppInfo> appInfos = new ArrayList<>();
         for(PackageInfo info : infos) {
             AppInfo appInfo = new AppInfo();
+            String sign = info.signatures[0].toCharsString();
+            appInfo.setMd5Sign(KeysUtils.encodeMD5(sign));
             appInfo.setPackname(info.packageName);
             appInfo.setIcon(info.applicationInfo.loadIcon(pm)); //应用程序图标
             appInfo.setName(info.applicationInfo.loadLabel(pm).toString()); //应用程序名称
@@ -45,6 +49,10 @@ public class SystemInfoUtils {
             appInfos.add(appInfo);
         }
         return appInfos;
+    }
+
+    public static List<AppInfo> getAppInfos() {
+        return getAppInfos(0);
     }
 
     /**
@@ -158,6 +166,38 @@ public class SystemInfoUtils {
             }
             return 0;
         }
+    }
+
+    /**
+     * 获取正在运行的进程,5.1版本以上不能用
+     * @return
+     */
+    public static List<TaskInfo> getRunningTask() {
+        List<TaskInfo> taskInfos = new ArrayList<>();
+        ActivityManager activityManager = (ActivityManager)x.app().getSystemService(Context.ACTIVITY_SERVICE);
+        PackageManager packageManager = x.app().getPackageManager();
+        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
+        for(ActivityManager.RunningAppProcessInfo processInfo : processInfos) {
+            try {
+                TaskInfo taskInfo = new TaskInfo();
+                String packname = processInfo.processName; //processname就是包名
+                ApplicationInfo applicationInfo = packageManager.getApplicationInfo(packname, 0);
+                Drawable icon = applicationInfo.loadIcon(packageManager);
+                String name = applicationInfo.loadLabel(packageManager).toString();
+                //得到进程占用内存大小
+                long memBytes = activityManager.getProcessMemoryInfo(new int[]{processInfo.pid})[0].getTotalPrivateDirty() * 1024;
+                boolean isUserTask = (applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0;
+                taskInfo.setPackname(packname);
+                taskInfo.setName(name);
+                taskInfo.setIcon(icon);
+                taskInfo.setUsertask(isUserTask);
+                taskInfo.setMemBytes(memBytes);
+                taskInfos.add(taskInfo);
+            } catch (PackageManager.NameNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        return taskInfos;
     }
 
     static FileSysData getFileSysData(String path) {

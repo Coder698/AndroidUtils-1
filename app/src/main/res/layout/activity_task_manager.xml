@@ -18,4 +18,42 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </RelativeLayout>
+    <FrameLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
+        <ListView android:id="@+id/lv_task_info"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
+        <TextView android:id="@+id/tv_tab_title"
+            android:text="系统程序"
+            android:background="#FF888888"
+            android:textColor="@android:color/white"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+    <LinearLayout android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button android:id="@+id/btn_select_all"
+            android:text="全选"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <Button android:id="@+id/btn_select_opper"
+            android:text="反选"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <Button android:id="@+id/btn_kill_all"
+            android:text="清理"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <Button android:id="@+id/btn_setting"
+            android:text="设置"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 </LinearLayout>

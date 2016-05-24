@@ -2,6 +2,7 @@ package cloud.cn.applicationtest.activity.home;
 
 import android.content.Intent;
 import android.hardware.Camera;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -15,6 +16,8 @@ import android.widget.TextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.xutils.common.util.DensityUtil;
+import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 import org.xutils.x;
@@ -24,6 +27,7 @@ import java.io.File;
 import cloud.cn.androidlib.activity.BaseFragment;
 import cloud.cn.androidlib.ui.SimpleCameraPreview;
 import cloud.cn.androidlib.utils.CameraUtils;
+import cloud.cn.androidlib.utils.DeviceInfoUtils;
 import cloud.cn.androidlib.utils.FileUtils;
 import cloud.cn.androidlib.utils.PrefUtils;
 import cloud.cn.applicationtest.AppConstants;
@@ -54,6 +58,7 @@ public class HomeFragment extends BaseFragment {
         names = new String[]{"手机防盗", "通讯卫士", "软件管家", "进程管理", "流量统计", "病毒查杀",
                 "缓存清理", "高级工具", "设置中心"};
         wrongPassNum = 0;
+        LogUtil.d("宽: " + DensityUtil.px2dip(DeviceInfoUtils.getScreenWidth()) + "高：" + DensityUtil.px2dip(DeviceInfoUtils.getScreenHeight()));
     }
 
     @Override
@@ -74,9 +79,33 @@ public class HomeFragment extends BaseFragment {
                     gotoAppManager();
                 } else if("进程管理".equals(names[position])) {
                     gotoTaskManager();
+                } else if("流量统计".equals(names[position])) {
+                    gotoTraffic();
+                } else if("缓存清理".equals(names[position])) {
+                    String imagePath = Environment.getExternalStorageDirectory() + File.separator + "1.pdf";
+                    //由文件得到uri
+                    Uri imageUri = Uri.fromFile(new File(imagePath));
+
+                    Intent shareIntent = new Intent();
+                    shareIntent.setAction(Intent.ACTION_SEND);
+                    shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+                    shareIntent.setType("application/pdf");
+                    startActivity(Intent.createChooser(shareIntent, "分享到"));
+                } else if("病毒查杀".equals(names[position])) {
+                    gotoAntiVirus();
                 }
             }
         });
+    }
+
+    private void gotoAntiVirus() {
+        Intent intent = new Intent(getActivity(), AntiVirusActivity.class);
+        startActivity(intent);
+    }
+
+    private void gotoTraffic() {
+        Intent intent = new Intent(getActivity(), TrafficActivity.class);
+        startActivity(intent);
     }
 
     private void gotoAppManager() {

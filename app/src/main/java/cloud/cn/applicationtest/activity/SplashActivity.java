@@ -100,6 +100,15 @@ public class SplashActivity extends BaseActivity {
                 }
             }.start();
         }
+        final File antiFile = new File(getFilesDir(), "antivirus.db");
+        if(!dbFile.exists()) {
+            new Thread() {
+                @Override
+                public void run() {
+                    FileUtils.copyAssets("antivirus.db", antiFile);
+                }
+            }.start();
+        }
         /*new Thread() {
             @Override
             public void run() {
