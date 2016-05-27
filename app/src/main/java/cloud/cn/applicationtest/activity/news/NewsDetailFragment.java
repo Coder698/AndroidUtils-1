@@ -19,6 +19,7 @@ import cloud.cn.applicationtest.adapter.NewsAdapter;
 import cloud.cn.applicationtest.adapter.TopNewsAdapter;
 import cloud.cn.applicationtest.engine.NewsEngine;
 import cloud.cn.applicationtest.entity.NewsDetail;
+import cloud.cn.applicationtest.ui.RefreshListView;
 
 /**
  * Created by Cloud on 2016/5/26.
@@ -29,7 +30,7 @@ public class NewsDetailFragment extends BaseFragment{
     private String title;
     private ViewPager vp_top_news;
     @ViewInject(R.id.lv_news)
-    private ListView lv_news;
+    private RefreshListView lv_news;
     private TextView tv_top_news_title;
     private CirclePageIndicator cpi_indicator;
     private View headView;
