@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+    <ImageView android:id="@+id/iv_pic"
+        android:scaleType="centerCrop"
+        android:src="@drawable/news_pic_default"
+        android:background="@android:color/darker_gray"
+        android:padding="1dp"
+        android:layout_width="110dp"
+        android:layout_height="70dp" />
+    <TextView android:text="新闻标题"
+        android:id="@+id/tv_title"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@id/iv_pic"
+        android:textColor="@android:color/black"
+        android:textSize="16dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView android:id="@+id/tv_date"
+        android:text="2012-12-12"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14dp"
+        android:layout_alignLeft="@id/tv_title"
+        android:layout_alignBottom="@id/iv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

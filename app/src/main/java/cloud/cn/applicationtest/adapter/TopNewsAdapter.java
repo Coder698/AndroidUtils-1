@@ -21,9 +21,19 @@ public class TopNewsAdapter extends PagerAdapter{
     public TopNewsAdapter(List<NewsDetail.News> topNews) {
         this.topNews = topNews;
     }
+
+    public void setDataSource(List<NewsDetail.News> topNews) {
+        this.topNews = topNews;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
-        return topNews.size();
+        if(topNews == null) {
+            return 0;
+        } else {
+            return topNews.size();
+        }
     }
 
     @Override
