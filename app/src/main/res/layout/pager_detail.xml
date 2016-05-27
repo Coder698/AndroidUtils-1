@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:background="@android:color/white">
+    <cloud.cn.applicationtest.ui.TopNewsViewPager android:id="@+id/vp_top_news"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"></cloud.cn.applicationtest.ui.TopNewsViewPager>
+    <ListView android:id="@+id/lv_news"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"></ListView>
+</LinearLayout>

@@ -2,6 +2,7 @@ package cloud.cn.androidlib.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 
 import org.xutils.common.util.LogUtil;
@@ -10,7 +11,7 @@ import org.xutils.x;
 /**
  * Created by Cloud on 2016/3/22.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends FragmentActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

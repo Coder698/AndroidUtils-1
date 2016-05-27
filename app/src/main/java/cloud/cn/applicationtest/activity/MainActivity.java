@@ -1,9 +1,9 @@
 package cloud.cn.applicationtest.activity;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.SparseArray;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
@@ -37,6 +37,8 @@ public class MainActivity extends BaseActivity {
     private RadioGroup rg_main_navigation;
     @ViewInject(R.id.rb_main_home)
     private RadioButton rb_main_home;
+    private LeftMenuFragment leftMenuFragment;
+    private SlidingMenu slidingMenu;
 
     @Override
     protected void initVariables() {
@@ -57,23 +59,40 @@ public class MainActivity extends BaseActivity {
             }
         });
         rb_main_home.setChecked(true);
-        //initSlidingMenu();
+        initMenuFragment();
+        initSlidingMenu();
+    }
+
+    public LeftMenuFragment getLeftMenuFragment() {
+        return leftMenuFragment;
     }
 
     private void changeFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fl_main_content, fragment);
         fragmentTransaction.commit();
     }
 
+    private void initMenuFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        leftMenuFragment = new LeftMenuFragment();
+        fragmentTransaction.replace(R.id.fl_menu, leftMenuFragment);
+        fragmentTransaction.commit();
+    }
+
     private void initSlidingMenu() {
-        SlidingMenu menu = new SlidingMenu(this);
-        menu.setMode(SlidingMenu.LEFT);
-        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        menu.setBehindOffset(200);
-        menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
-        menu.setMenu(R.layout.menu_sliding_layout);
+        slidingMenu = new SlidingMenu(this);
+        slidingMenu.setMode(SlidingMenu.LEFT); //侧边栏从哪边出
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);//从哪边可以拖动，fullscreen表示全屏都可以拖动,margin表示一定区域内可拖动
+        slidingMenu.setBehindOffset(200);//菜单弹出后内容显示多少
+        slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        slidingMenu.setMenu(R.layout.menu_sliding_layout);
+    }
+
+    public void toggleSlidingMenu() {
+        slidingMenu.toggle();
     }
 
     @Override
