@@ -3,7 +3,6 @@ package cloud.cn.applicationtest.activity.home;
 import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
@@ -15,7 +14,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mining.app.zxing.activity.MipcaActivityCapture;
+import com.karics.library.zxing.android.CaptureActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -94,7 +93,7 @@ public class HomeFragment extends BaseFragment {
                     shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
                     shareIntent.setType("application/pdf");
                     startActivity(Intent.createChooser(shareIntent, "分享到"));*/
-                    Intent intent = new Intent(getActivity(), MipcaActivityCapture.class);
+                    Intent intent = new Intent(getActivity(), CaptureActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivityForResult(intent, 0);
                 } else if("病毒查杀".equals(names[position])) {
@@ -108,7 +107,7 @@ public class HomeFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK) {
-            LogUtil.d(data.getExtras().getString("result"));
+            LogUtil.d(data.getExtras().getString("codedContent"));
         }
     }
 
@@ -166,22 +165,22 @@ public class HomeFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         //初始化相机
-        camera = CameraUtils.getCameraInstance(1);
+        /*camera = CameraUtils.getCameraInstance(1);
         if(camera != null) {
             cameraPreview = new SimpleCameraPreview(getActivity(), camera);
             camera_preview.addView(cameraPreview);
-        }
+        }*/
         EventBus.getDefault().register(this);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(camera != null) {
+        /*if(camera != null) {
             camera_preview.removeView(cameraPreview);
             camera.release();
             camera = null;
-        }
+        }*/
         EventBus.getDefault().unregister(this);
     }
 

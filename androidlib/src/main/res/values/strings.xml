@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">AndroidLib</string>
+    <string name="button_ok">确认</string>
+    <string name="msg_camera_framework_bug">摄像头发生错误. 请检查摄像头是否被其他程序占用然后重试.</string>
+    <string name="viewfinderview_status_text1">将二维码/条码放入取景框内</string>
+    <string name="viewfinderview_status_text2">即可自动扫描</string>
 </resources>

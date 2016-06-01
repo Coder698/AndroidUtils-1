@@ -74,7 +74,7 @@
         <activity android:name=".activity.home.TrafficActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.home.AntiVirusActivity" android:screenOrientation="portrait"></activity>
         <activity android:name=".activity.news.NewsReaderActivity" android:screenOrientation="portrait"></activity>
-        <activity android:name="com.mining.app.zxing.activity.MipcaActivityCapture"
+        <activity android:name="com.karics.library.zxing.android.CaptureActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden"></activity>
