@@ -1,5 +1,6 @@
 package cloud.cn.applicationtest.activity.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.hardware.Camera;
 import android.net.Uri;
@@ -13,6 +14,8 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.mining.app.zxing.activity.MipcaActivityCapture;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -82,7 +85,7 @@ public class HomeFragment extends BaseFragment {
                 } else if("流量统计".equals(names[position])) {
                     gotoTraffic();
                 } else if("缓存清理".equals(names[position])) {
-                    String imagePath = Environment.getExternalStorageDirectory() + File.separator + "1.pdf";
+                    /*String imagePath = Environment.getExternalStorageDirectory() + File.separator + "1.pdf";
                     //由文件得到uri
                     Uri imageUri = Uri.fromFile(new File(imagePath));
 
@@ -90,12 +93,23 @@ public class HomeFragment extends BaseFragment {
                     shareIntent.setAction(Intent.ACTION_SEND);
                     shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
                     shareIntent.setType("application/pdf");
-                    startActivity(Intent.createChooser(shareIntent, "分享到"));
+                    startActivity(Intent.createChooser(shareIntent, "分享到"));*/
+                    Intent intent = new Intent(getActivity(), MipcaActivityCapture.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivityForResult(intent, 0);
                 } else if("病毒查杀".equals(names[position])) {
                     gotoAntiVirus();
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK) {
+            LogUtil.d(data.getExtras().getString("result"));
+        }
     }
 
     private void gotoAntiVirus() {

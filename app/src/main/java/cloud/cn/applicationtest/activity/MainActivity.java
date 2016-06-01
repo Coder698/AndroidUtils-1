@@ -11,6 +11,7 @@ import android.widget.RadioGroup;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
+import org.xutils.common.util.LogUtil;
 import org.xutils.view.annotation.ContentView;
 import org.xutils.view.annotation.ViewInject;
 
@@ -48,6 +49,7 @@ public class MainActivity extends BaseActivity {
         fragments.put(R.id.rb_main_smartservice, new SmartServiceFragment());
         fragments.put(R.id.rb_main_govern, new GovernFragment());
         fragments.put(R.id.rb_main_setting, new SettingFragment());
+        LogUtil.d("density " + getResources().getDisplayMetrics().density);
     }
 
     @Override
