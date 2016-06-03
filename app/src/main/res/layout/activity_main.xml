@@ -25,7 +25,7 @@
             android:drawableTop="@drawable/selector_news_btn"
             style="@style/main_rb" />
         <RadioButton android:id="@+id/rb_main_smartservice"
-            android:text="智慧服务"
+            android:text="谷歌市场"
             android:drawableTop="@drawable/selector_smartservice_btn"
             style="@style/main_rb" />
         <RadioButton android:id="@+id/rb_main_govern"

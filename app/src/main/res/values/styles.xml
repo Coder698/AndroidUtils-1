@@ -27,7 +27,7 @@
         <item name="android:drawablePadding">5dp</item>
     </style>
 
-    <style name="Theme.PageIndicatorDefaults" parent="@style/Theme.AppCompat.Light.NoActionBar">
+    <style name="Theme.PageIndicatorDefaults" parent="@style/CustomActionBarTheme">
         <item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>
         <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
     </style>

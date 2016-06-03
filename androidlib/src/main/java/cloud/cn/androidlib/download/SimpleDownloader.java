@@ -37,7 +37,7 @@ public abstract class SimpleDownloader implements IDownloader{
 
     @Override
     public boolean isAutoRename() {
-        return isAutoRename();
+        return this.isAutoRename;
     }
 
     @Override

@@ -4,7 +4,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.SearchView;
 import android.util.SparseArray;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -60,6 +63,7 @@ public class MainActivity extends BaseActivity {
                 changeFragment(fragments.get(checkedId));
             }
         });
+        getSupportActionBar().hide();
         rb_main_home.setChecked(true);
         initMenuFragment();
         initSlidingMenu();
@@ -102,5 +106,32 @@ public class MainActivity extends BaseActivity {
         if(PrefUtils.getBoolean(AppConstants.PREF.IS_AUTO_UPDATE, true)) {
             UpgradeEngine.checkUpgrade(this);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        SearchView searchView = (SearchView)menu.findItem(R.id.action_search).getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
