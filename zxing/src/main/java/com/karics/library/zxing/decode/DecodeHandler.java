@@ -36,7 +36,7 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
-import cloud.cn.androidlib.R;
+import cloud.cn.zxing.R;
 
 public final class DecodeHandler extends Handler {
 

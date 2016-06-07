@@ -29,9 +29,7 @@ import android.util.Log;
 import java.io.Closeable;
 import java.io.IOException;
 
-import com.karics.library.zxing.android.PreferencesActivity;
-
-import cloud.cn.androidlib.R;
+import cloud.cn.zxing.R;
 
 /**
  * Manages beeps and vibrations for {@link CaptureActivity}. 管理声音和震动

@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-import cloud.cn.androidlib.R;
+import cloud.cn.zxing.R;
 
 /**
  * 这个activity打开相机，在后台线程做常规的扫描；它绘制了一个结果view来帮助正确地显示条形码，在扫描的时候显示反馈信息，

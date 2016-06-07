@@ -34,7 +34,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-import cloud.cn.androidlib.R;
+import cloud.cn.zxing.R;
 
 /**
  * This view is overlaid on top of the camera preview. It adds the viewfinder
