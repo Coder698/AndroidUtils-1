@@ -1,5 +1,8 @@
 package cloud.cn.androidlib.utils;
 
+import android.util.Base64;
+
+import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -32,5 +35,29 @@ public class KeysUtils {
             sb.append(hexStr);
         }
         return sb.toString();
+    }
+
+    public static String encodeBase64(String key) {
+        String s = "";
+        try {
+            byte[] b = key.getBytes("UTF-8");
+            b = Base64.encode(b, Base64.DEFAULT);
+            s = new String(b);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    public static String decodeBase64(String key) {
+        String s = "";
+        try {
+            byte[] b = key.getBytes("UTF-8");
+            b = Base64.decode(b, Base64.DEFAULT);
+            s = new String(b);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return s;
     }
 }

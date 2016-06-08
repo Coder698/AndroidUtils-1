@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.view.View;
+import android.widget.Toast;
 
 import org.xutils.x;
 
@@ -20,6 +21,11 @@ public class UiUtils {
      */
     public static String[] getStringArray(int tabNames) {
         return getResource().getStringArray(tabNames);
+    }
+
+    /** 获取文字 */
+    public static String getString(int resId) {
+        return getResource().getString(resId);
     }
 
     public static Resources getResource() {
@@ -72,5 +78,29 @@ public class UiUtils {
      */
     public static void cancel(Runnable auToRunTask) {
         AppApplication.getHandler().removeCallbacks(auToRunTask);
+    }
+
+    /** 对toast的简易封装。线程安全，可以在非UI线程调用。 */
+    public static void showToastSafe(final int resId) {
+        showToastSafe(getString(resId));
+    }
+
+    //判断当前的线程是不是在主线程
+    public static boolean isRunInMainThread() {
+        return android.os.Process.myTid() == AppApplication.getMainTid();
+    }
+
+    /** 对toast的简易封装。线程安全，可以在非UI线程调用。 */
+    public static void showToastSafe(final String str) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showToast(str);
+            }
+        });
+    }
+
+    public static void showToast(String str) {
+        Toast.makeText(x.app(), str, Toast.LENGTH_LONG).show();
     }
 }

@@ -20,6 +20,7 @@ import org.xutils.view.annotation.ViewInject;
 
 import cloud.cn.androidlib.activity.BaseActivity;
 import cloud.cn.androidlib.utils.PrefUtils;
+import cloud.cn.androidlib.utils.UiUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.activity.govern.GovernFragment;
