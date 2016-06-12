@@ -1,4 +1,4 @@
-package cloud.cn.applicationtest.ui;
+package cloud.cn.applicationtest.view;
 
 import android.content.Context;
 import android.support.v4.view.ViewPager;
@@ -8,20 +8,18 @@ import android.view.MotionEvent;
 /**
  * Created by Cloud on 2016/5/26.
  */
-public class HorizontalViewPager extends ViewPager{
-    public HorizontalViewPager(Context context) {
+public class TopNewsViewPager extends ViewPager{
+    public TopNewsViewPager(Context context) {
         super(context);
     }
 
-    public HorizontalViewPager(Context context, AttributeSet attrs) {
+    public TopNewsViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(getCurrentItem() != 0) {
-            getParent().requestDisallowInterceptTouchEvent(true);
-        }
+        getParent().requestDisallowInterceptTouchEvent(true);
         return super.onInterceptTouchEvent(ev);
     }
 }

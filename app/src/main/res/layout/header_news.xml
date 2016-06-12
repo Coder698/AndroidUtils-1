@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <cloud.cn.applicationtest.ui.TopNewsViewPager android:id="@+id/vp_top_news"
+    <cloud.cn.applicationtest.view.TopNewsViewPager
+        android:id="@+id/vp_top_news"
         android:layout_width="match_parent"
-        android:layout_height="200dp"></cloud.cn.applicationtest.ui.TopNewsViewPager>
+        android:layout_height="200dp"></cloud.cn.applicationtest.view.TopNewsViewPager>
     <RelativeLayout
         android:layout_alignParentBottom="true"
         android:background="#66000000"

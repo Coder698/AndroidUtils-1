@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import cloud.cn.androidlib.entity.ContactBean;
 import cloud.cn.applicationtest.R;
-import cloud.cn.applicationtest.ui.QuickAlphabeticBar;
+import cloud.cn.applicationtest.view.QuickAlphabeticBar;
 
 public class ContactListAdapter extends BaseAdapter {
     private LayoutInflater inflater;

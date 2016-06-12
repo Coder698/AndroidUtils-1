@@ -1,4 +1,4 @@
-package cloud.cn.androidlib.ui;
+package cloud.cn.androidlib.view;
 
 import android.content.Context;
 import android.hardware.Camera;

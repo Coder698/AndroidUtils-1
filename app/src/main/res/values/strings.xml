@@ -5,4 +5,13 @@
     <string name="sample_device_admin_description">我是超级管理员，我可以一键锁屏</string>
     <string name="scan_text">将二维码放入框内, 即可自动扫描</string>
     <string name="action_search">搜索</string>
+    <string-array name="tab_names">
+        <item>首页</item>
+        <item>应用</item>
+        <item>游戏</item>
+        <item>专题</item>
+        <item>推荐</item>
+        <item>分类</item>
+        <item>排行</item>
+    </string-array>
 </resources>

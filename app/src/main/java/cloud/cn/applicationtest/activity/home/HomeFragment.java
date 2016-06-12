@@ -27,8 +27,7 @@ import org.xutils.x;
 import java.io.File;
 
 import cloud.cn.androidlib.activity.BaseFragment;
-import cloud.cn.androidlib.ui.SimpleCameraPreview;
-import cloud.cn.androidlib.utils.CameraUtils;
+import cloud.cn.androidlib.view.SimpleCameraPreview;
 import cloud.cn.androidlib.utils.DeviceInfoUtils;
 import cloud.cn.androidlib.utils.FileUtils;
 import cloud.cn.androidlib.utils.PrefUtils;

@@ -1,4 +1,4 @@
-package cloud.cn.applicationtest.ui;
+package cloud.cn.applicationtest.view;
 
 import android.content.Context;
 import android.util.AttributeSet;

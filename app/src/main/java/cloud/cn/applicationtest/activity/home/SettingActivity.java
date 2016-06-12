@@ -19,8 +19,8 @@ import cloud.cn.androidlib.utils.SystemInfoUtils;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.service.ShowAddressService;
-import cloud.cn.applicationtest.ui.SettingClickView;
-import cloud.cn.applicationtest.ui.SettingToggleView;
+import cloud.cn.applicationtest.view.SettingClickView;
+import cloud.cn.applicationtest.view.SettingToggleView;
 
 /**
  * Created by john on 2016/5/11.

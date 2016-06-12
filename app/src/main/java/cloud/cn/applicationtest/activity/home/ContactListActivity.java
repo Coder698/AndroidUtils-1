@@ -19,7 +19,7 @@ import cloud.cn.androidlib.interfaces.SuccessCallback;
 import cloud.cn.applicationtest.AppConstants;
 import cloud.cn.applicationtest.R;
 import cloud.cn.applicationtest.adapter.ContactListAdapter;
-import cloud.cn.applicationtest.ui.QuickAlphabeticBar;
+import cloud.cn.applicationtest.view.QuickAlphabeticBar;
 
 /**
  * 联系人列表

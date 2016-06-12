@@ -48,7 +48,7 @@ public class NewsFragment extends BaseFragment {
     @Override
     protected void initVariables() {
         detailFragments = new ArrayList<>();
-        adapter = new NewsPagerAdapter(getActivity().getSupportFragmentManager(), detailFragments);
+        adapter = new NewsPagerAdapter(getChildFragmentManager(), detailFragments);
     }
 
     @Override
