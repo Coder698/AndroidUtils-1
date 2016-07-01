@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -117,6 +118,14 @@ public class RefreshListView extends LinearLayout{
 
     public void setOnBeginRefreshListener(OnBeginRefreshListener onBeginRefreshListener) {
         this.onBeginRefreshListener = onBeginRefreshListener;
+    }
+
+    public void setOnItemClickListener(AdapterView.OnItemClickListener onItemClickListener) {
+        lv_apps.setOnItemClickListener(onItemClickListener);
+    }
+
+    public void setOnItemLongClickListener(AdapterView.OnItemLongClickListener onItemLongClickListener) {
+        lv_apps.setOnItemLongClickListener(onItemLongClickListener);
     }
 
     public int getPageNum() {
