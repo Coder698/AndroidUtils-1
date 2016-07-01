@@ -110,9 +110,7 @@ public class FileUtils {
     public static void delFolder(String folderPath) {
         try {
             delAllFile(folderPath); // 删除完里面所有内容
-            String filePath = folderPath;
-            filePath = filePath.toString();
-            File myFilePath = new File(filePath);
+            File myFilePath = new File(folderPath);
             myFilePath.delete(); // 删除空文件夹
         } catch (Exception e) {
             e.printStackTrace();

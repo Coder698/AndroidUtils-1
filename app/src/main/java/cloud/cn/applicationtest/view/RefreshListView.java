@@ -1,116 +1,137 @@
 package cloud.cn.applicationtest.view;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import org.xutils.view.annotation.ViewInject;
-import org.xutils.x;
+import org.xutils.common.util.LogUtil;
 
+import java.util.List;
+
+import cloud.cn.androidlib.utils.UiUtils;
 import cloud.cn.applicationtest.R;
+import cloud.cn.applicationtest.adapter.MyBaseAdapter;
+import in.srain.cube.views.loadmore.LoadMoreContainer;
+import in.srain.cube.views.loadmore.LoadMoreHandler;
+import in.srain.cube.views.loadmore.LoadMoreListViewContainer;
+import in.srain.cube.views.ptr.PtrClassicFrameLayout;
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
 
 /**
- * Created by Cloud on 2016/5/27.
+ * Created by Cloud on 2016/6/30.
  */
-public class RefreshListView extends ListView {
-    private int headerViewHeight;
-    private int startY;
-    private View headerView;
-    private int currentState;
-    @ViewInject(R.id.iv_arrow)
-    private ImageView iv_arrow;
-    @ViewInject(R.id.pb_progress)
-    private ProgressBar pb_progress;
-    @ViewInject(R.id.tv_title)
-    private TextView tv_title;
-    @ViewInject(R.id.tv_date)
-    private TextView tv_date;
-    public final static int STATE_RELEASE_REFRESH =  0;
-    public final static int STATE_PULL_REFRESH =  1;
-    public final static int STATE_REFRESHING = 2;
+public class RefreshListView extends LinearLayout{
+    public interface OnBeginRefreshListener {
+        void onRefreshBegin();
+        void onLoadMoreBegin(int pageNum);
+    }
+    private ListView lv_apps;
+    private PtrClassicFrameLayout rotate_header_list_view_frame;
+    private LoadMoreListViewContainer load_more_list_view_container;
+    private OnBeginRefreshListener onBeginRefreshListener;
+    private List datas;
+    private MyBaseAdapter adapter;
+    private int pageNum = 0;
+    private int pageSize = 20;
 
     public RefreshListView(Context context) {
         super(context);
-        initHeaderView();
+        initView();
     }
 
     public RefreshListView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initHeaderView();
+        initView();
     }
 
-    public RefreshListView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        initHeaderView();
-    }
+    private void initView() {
+        View view = UiUtils.inflate(R.layout.view_refresh_listview);
+        lv_apps = UiUtils.findViewById(view, R.id.lv_apps);
+        rotate_header_list_view_frame = UiUtils.findViewById(view, R.id.rotate_header_list_view_frame);
+        load_more_list_view_container = UiUtils.findViewById(view, R.id.load_more_list_view_container);
 
-    private void initHeaderView() {
-        headerView = View.inflate(getContext(), R.layout.header_refresh, null);
-        x.view().inject(this, headerView);
-        headerView.measure(0, 0);
-        headerViewHeight = headerView.getMeasuredHeight();
-        headerView.setPadding(0, -headerViewHeight, 0, 0);
-        this.addHeaderView(headerView);
-        changeState(STATE_PULL_REFRESH);
-    }
+        rotate_header_list_view_frame.setLastUpdateTimeRelateObject(this);//显示上次更新时间
+        rotate_header_list_view_frame.setLoadingMinTime(1000);//最少loading时间
+        rotate_header_list_view_frame.setPtrHandler(new PtrHandler() {
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                return PtrDefaultHandler.checkContentCanBePulledDown(frame, lv_apps, header);
+            }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                startY = (int)ev.getRawY();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                int endY = (int)ev.getRawY();
-                int dy = endY - startY;
-                if(dy > 0 && getFirstVisiblePosition() == 0 && currentState != STATE_REFRESHING) {
-                    int padding = dy - headerViewHeight;
-                    headerView.setPadding(0, padding, 0, 0);
-                    if(padding > 0 && currentState != STATE_RELEASE_REFRESH) {
-                        changeState(STATE_RELEASE_REFRESH);
-                    } else if(padding < 0 && currentState != STATE_PULL_REFRESH) {
-                        changeState(STATE_PULL_REFRESH);
-                    }
-                    //return true;
-                } else {
-                    startY = endY;
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+                LogUtil.d("开始刷新");
+                if(onBeginRefreshListener != null) {
+                    onBeginRefreshListener.onRefreshBegin();
                 }
-                break;
-            case MotionEvent.ACTION_UP:
-                if(currentState == STATE_PULL_REFRESH) {
-                    headerView.setPadding(0, -headerViewHeight, 0, 0);//隐藏
-                } else if(currentState == STATE_RELEASE_REFRESH) {
-                    headerView.setPadding(0, 0, 0, 0);//显示
-                    changeState(STATE_REFRESHING);
+            }
+        });
+
+        load_more_list_view_container.useDefaultHeader();
+        load_more_list_view_container.setLoadMoreHandler(new LoadMoreHandler() {
+            @Override
+            public void onLoadMore(LoadMoreContainer loadMoreContainer) {
+                LogUtil.d("加载更多");
+                if(onBeginRefreshListener != null) {
+                    pageNum++;
+                    onBeginRefreshListener.onLoadMoreBegin(pageNum);
                 }
-                break;
-        }
-        return super.onTouchEvent(ev);
+            }
+        });
+        addView(view);
     }
 
-    private void changeState(int state) {
-        currentState = state;
-        switch (currentState) {
-            case STATE_PULL_REFRESH://下拉刷新
-                tv_title.setText("下拉刷新");
-                iv_arrow.setVisibility(View.VISIBLE);
-                pb_progress.setVisibility(View.INVISIBLE);
-                break;
-            case STATE_RELEASE_REFRESH://松开刷新
-                tv_title.setText("松开刷新");
-                iv_arrow.setVisibility(View.VISIBLE);
-                pb_progress.setVisibility(View.INVISIBLE);
-                break;
-            case STATE_REFRESHING://正在刷新
-                tv_title.setText("正在刷新");
-                iv_arrow.setVisibility(View.INVISIBLE);
-                pb_progress.setVisibility(View.VISIBLE);
-                break;
+    public void setRefreshData(List datas) {
+        if(datas != null) {
+            pageNum = 0;
+            adapter.setDataSource(datas);
+            this.datas = datas;
+            load_more_list_view_container.loadMoreFinish(false, true);
         }
+        rotate_header_list_view_frame.refreshComplete();
+    }
+
+    public void setLoadMoreData(List datas) {
+        if(datas != null) {
+            this.datas.addAll(datas);
+            adapter.notifyDataSetChanged();
+        }
+        if(datas == null || (datas != null && datas.size() < pageSize)) {
+            load_more_list_view_container.loadMoreFinish(false, false);
+        } else {
+            load_more_list_view_container.loadMoreFinish(false, true);
+        }
+    }
+
+    public void setAdapter(MyBaseAdapter adapter) {
+        this.adapter = adapter;
+        lv_apps.setAdapter(adapter);
+    }
+
+    public void setOnBeginRefreshListener(OnBeginRefreshListener onBeginRefreshListener) {
+        this.onBeginRefreshListener = onBeginRefreshListener;
+    }
+
+    public int getPageNum() {
+        return pageNum;
+    }
+
+    public void setPageNum(int pageNum) {
+        this.pageNum = pageNum;
+    }
+
+    public int getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
     }
 }

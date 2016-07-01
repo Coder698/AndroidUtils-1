@@ -18,9 +18,10 @@ public final class AppConstants {
         public static String IS_SHOW_ADDRESS = "IS_SHOW_ADDRESS";
     }
     public final static class MOBILE_API {
-        public final static String ORIGIN = "http://192.168.0.102:8080/guard";
+        public final static String ORIGIN = "http://192.168.40.102:8080/guard";
         public final static String UPGRADE_INFO = ORIGIN + "/apk.json";
-        public final static String Z_ORIGIN = "http://192.168.0.102:8080/zhbj";
+        public final static String Z_ORIGIN = "http://192.168.40.102:8080/zhbj";
+        public final static String APP_ORIGIN = "http://192.168.40.102:8080/WebInfos/";
         public final static String CATEGORIES = Z_ORIGIN + "/categories.json";
     }
     public final static class EXTRA_KEY {

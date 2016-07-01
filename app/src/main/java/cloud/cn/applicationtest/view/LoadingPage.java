@@ -13,11 +13,11 @@ import cloud.cn.applicationtest.R;
  */
 public abstract class LoadingPage extends FrameLayout {
 
-    private static final int STATE_UNLOAD = 0;// 未加载
-    private static final int STATE_LOADING = 1;// 正在加载
-    private static final int STATE_LOAD_EMPTY = 2;// 数据为空
-    private static final int STATE_LOAD_ERROR = 3;// 加载失败
-    private static final int STATE_LOAD_SUCCESS = 4;// 访问成功
+    public static final int STATE_UNLOAD = 0;// 未加载
+    public static final int STATE_LOADING = 1;// 正在加载
+    public static final int STATE_LOAD_EMPTY = 2;// 数据为空
+    public static final int STATE_LOAD_ERROR = 3;// 加载失败
+    public static final int STATE_LOAD_SUCCESS = 4;// 访问成功
 
     private int mCurrentState = STATE_UNLOAD;// 当前状态
 
@@ -44,15 +44,6 @@ public abstract class LoadingPage extends FrameLayout {
         // 加载失败
         if (mErrorView == null) {
             mErrorView = onCreateErrorView();
-            // 点击重试
-            mErrorView.findViewById(R.id.btn_retry).setOnClickListener(
-                    new OnClickListener() {
-
-                        @Override
-                        public void onClick(View v) {
-                            loadData();
-                        }
-                    });
             addView(mErrorView);
         }
 
@@ -62,13 +53,30 @@ public abstract class LoadingPage extends FrameLayout {
             addView(mEmptyView);
         }
 
+        //成功界面，显示数据
+        if(mSuccessView == null) {
+            mSuccessView = onCreateSuccessView();
+            if(mSuccessView != null) {
+                addView(mSuccessView);
+            }
+        }
+
+        showRightPage();
+    }
+
+    /**
+     * 设置当前state,显示对应页面
+     * @param state
+     */
+    public void showRightPage(int state) {
+        mCurrentState = state;
         showRightPage();
     }
 
     /**
      * 根据当前状态,展示正确页面
      */
-    private void showRightPage() {
+    public void showRightPage() {
         if (mLoadingView != null) {
             mLoadingView
                     .setVisibility((mCurrentState == STATE_LOADING || mCurrentState == STATE_UNLOAD) ? View.VISIBLE
@@ -85,14 +93,6 @@ public abstract class LoadingPage extends FrameLayout {
             mErrorView
                     .setVisibility(mCurrentState == STATE_LOAD_ERROR ? View.VISIBLE
                             : View.GONE);
-        }
-
-        // 访问成功
-        if (mSuccessView == null && mCurrentState == STATE_LOAD_SUCCESS) {
-            mSuccessView = onCreateSuccessView();
-            if (mSuccessView != null) {// 防止子类返回null
-                addView(mSuccessView);
-            }
         }
 
         if (mSuccessView != null) {
@@ -113,7 +113,16 @@ public abstract class LoadingPage extends FrameLayout {
      * 初始化加载失败布局
      */
     private View onCreateErrorView() {
-        return UiUtils.inflate(R.layout.layout_error);
+        View view = UiUtils.inflate(R.layout.layout_error);
+        // 点击重试
+        view.findViewById(R.id.btn_retry).setOnClickListener(
+                new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        loadData();
+                    }
+                });
+        return view;
     }
 
     /**
@@ -126,69 +135,18 @@ public abstract class LoadingPage extends FrameLayout {
     /**
      * 初始化访问成功布局, 子类必须实现
      */
-    public abstract View onCreateSuccessView();
+    protected abstract View onCreateSuccessView();
 
     /**
      * 加载数据
      */
-    public void loadData() {
-        // 状态归零
-        if (mCurrentState == STATE_LOAD_EMPTY
-                || mCurrentState == STATE_LOAD_ERROR
-                || mCurrentState == STATE_LOAD_SUCCESS) {
-            mCurrentState = STATE_UNLOAD;
-        }
-
-        if (mCurrentState == STATE_UNLOAD) {
-            // 异步加载网络数据
-            ThreadManager.getLongPool().execute(new Runnable() {
-
-                @Override
-                public void run() {
-                    // 开始加载网络数据
-                    final ResultState state = onLoad();
-                    // 必须在主线程更新界面
-                    UiUtils.runOnUiThread(new Runnable() {
-
-                        @Override
-                        public void run() {
-                            if (state != null) {
-                                // 更新当前状态
-                                mCurrentState = state.getState();
-                                // 更新当前页面
-                                showRightPage();
-                            }
-                        }
-                    });
-                }
-            });
-        }
-    }
+    protected abstract void loadData();
 
     /**
-     * 加载网络数据,必须子类实现
-     *
-     * @return 返回加载状态
+     * 获取成功界面
+     * @return
      */
-    public abstract ResultState onLoad();
-
-    /**
-     * 使用枚举表示访问网络的几种状态
-     */
-    public enum ResultState {
-        STATE_SUCCESS(STATE_LOAD_SUCCESS), // 访问成功
-        STATE_EMPTY(STATE_LOAD_EMPTY), // 数据为空
-        STATE_ERROR(STATE_LOAD_ERROR);// 访问失败
-
-        private int state;
-
-        private ResultState(int state) {
-            this.state = state;
-        }
-
-        public int getState() {
-            return state;
-        }
+    public View getSuccessView() {
+        return mSuccessView;
     }
-
 }

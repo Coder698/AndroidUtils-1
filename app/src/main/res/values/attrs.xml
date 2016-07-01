@@ -6,4 +6,7 @@
         <attr name="desc_on" format="string"/>
         <attr name="desc_off" format="string"/>
     </declare-styleable>
+    <declare-styleable name="RatioLayout">
+        <attr name="ratio" format="float"/>
+    </declare-styleable>
 </resources>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/list_item_bg"
+        android:orientation="vertical">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp">
+            <ImageView android:id="@+id/iv_icon"
+                android:layout_margin="8dp"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_centerVertical="true"
+                android:src="@drawable/ic_default"/>
+            <TextView android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/iv_icon"
+                android:text="111111111111"
+                android:textColor="#000"
+                android:textSize="18sp"/>
+            <RatingBar android:id="@+id/rb_ratingBar"
+                android:isIndicator="true"
+                android:layout_marginTop="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_below="@id/tv_name"
+                android:layout_toRightOf="@id/iv_icon"
+                android:progressDrawable="@drawable/process_ratingbar"
+                android:rating="2.5"/>
+            <TextView android:id="@+id/tv_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/iv_icon"
+                android:layout_below="@id/rb_ratingBar"
+                android:text="3.8MB"
+                android:textColor="#bbb"
+                android:textSize="16sp"/>
+            <LinearLayout android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp">
+                <ImageView android:id="@+id/iv_download"
+                    android:src="@drawable/ic_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView android:text="下载"
+                    android:textColor="#000"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </RelativeLayout>
+        <View android:background="#ccc"
+            android:layout_width="match_parent"
+            android:layout_height="0.2dp"></View>
+        <TextView android:id="@+id/tv_desc"
+            android:singleLine="true"
+            android:padding="5dp"
+            android:textSize="16sp"
+            android:textColor="#aaa"
+            android:text="每个结点至多可以拥有m个子结"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -17,7 +17,11 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         injected = true;
-        View view = x.view().inject(this, inflater, container);
+        View view = null;
+        //可以使用ContentView注解,不使用的话需要自己设置contentView
+        if(annotationContentView()) {
+            view = x.view().inject(this, inflater, container);
+        }
         initVariables();
         initViews(savedInstanceState);
         loadData();
@@ -32,6 +36,10 @@ public abstract class BaseFragment extends Fragment {
 
     //调用mobileAPI方法
     protected abstract void loadData();
+
+    public boolean annotationContentView() {
+        return true;
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
