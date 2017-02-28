@@ -18,20 +18,18 @@ public class RatioLayout extends FrameLayout{
 
     public RatioLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RatioLayout);
-        ratio = a.getFloat(R.styleable.RatioLayout_ratio, 1);
-        a.recycle();
+        initView(attrs);
     }
 
     public RatioLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RatioLayout);
-        ratio = a.getFloat(R.styleable.RatioLayout_ratio, 1);
-        a.recycle();
+        initView(attrs);
     }
 
-    private void initView() {
-
+    private void initView(AttributeSet attrs) {
+        TypedArray typedArray = getContext().obtainStyledAttributes(attrs, R.styleable.RatioLayout);
+        ratio = typedArray.getFloat(R.styleable.RatioLayout_ratio, -1);
+        typedArray.recycle();
     }
 
     @Override
