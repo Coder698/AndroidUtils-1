@@ -71,6 +71,14 @@ public class DeviceInfoUtils {
   }
 
   /**
+   * 返回当前屏幕是否为竖屏。
+   * @return 当且仅当当前屏幕为竖屏时返回true,否则返回false。
+   */
+  public static boolean isScreenPortrait() {
+    return x.app().getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+  }
+
+  /**
    * 获取当前应用版本名称
    * @return
    */

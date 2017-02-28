@@ -1,6 +1,7 @@
 package cloud.cn.applicationtest.view;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
@@ -17,11 +18,16 @@ public class RatioLayout extends FrameLayout{
 
     public RatioLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        ratio = attrs.getAttributeFloatValue(R.styleable.RatioLayout_ratio, -1);
+        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RatioLayout);
+        ratio = a.getFloat(R.styleable.RatioLayout_ratio, 1);
+        a.recycle();
     }
 
     public RatioLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.RatioLayout);
+        ratio = a.getFloat(R.styleable.RatioLayout_ratio, 1);
+        a.recycle();
     }
 
     private void initView() {
@@ -30,17 +36,28 @@ public class RatioLayout extends FrameLayout{
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        //1 获取宽度
-        //2 根据宽度和比例ratio,计算控件的高度
-        //3 重新测量控件
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        //模式有MeasureSpec.AT_MOST,至多模式，控件有多大就显示多大,wrap_content
-        //MeasureSpec.EXACTLY,确定模式，类似宽高写死,match_parent
-        //MeasureSpec.UNSPECIFIED,未指定模式
-        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
-        int height = MeasureSpec.getSize(heightMeasureSpec);
-        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if(widthMode == MeasureSpec.EXACTLY)
+        // widthMeasureSpec 宽度的规则 包含了两部分 模式 值
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec); // 模式
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);// 宽度大小
+        int width = widthSize - getPaddingLeft() - getPaddingRight();// 去掉左右两边的padding
+
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec); // 模式
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);// 高度大小
+        int height = heightSize - getPaddingTop() - getPaddingBottom();// 去掉上下两边的padding
+
+        if (widthMode == MeasureSpec.EXACTLY
+                && heightMode != MeasureSpec.EXACTLY) {
+            // 修正一下 高度的值 让高度=宽度/比例
+            height = (int) (width / ratio + 0.5f); // 保证4舍五入
+        } else if (widthMode != MeasureSpec.EXACTLY
+                && heightMode == MeasureSpec.EXACTLY) {
+            // 由于高度是精确的值 ,宽度随着高度的变化而变化
+            width = (int) ((height * ratio) + 0.5f);
+        }
+        // 重新制作了新的规则
+        widthMeasureSpec = MeasureSpec.makeMeasureSpec(width + getPaddingLeft() + getPaddingRight(), MeasureSpec.EXACTLY);
+        heightMeasureSpec = MeasureSpec.makeMeasureSpec(height + getPaddingTop() + getPaddingBottom(), MeasureSpec.EXACTLY);
+
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 }
